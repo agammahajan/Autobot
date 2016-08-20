@@ -8,18 +8,32 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, GIDSignInUIDelegate {
+
+    @IBOutlet weak var signInButton: GIDSignInButton!
+    @IBOutlet weak var backgroundImage: UIImageView!
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Optimus_Prime.png")!)
+//        backgroundImage.image = UIImage(named: "Optimus_Prime.png")
+        GIDSignIn.sharedInstance().uiDelegate = self
+        
     }
+
+
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+
+
+    
+    
 
 }
 

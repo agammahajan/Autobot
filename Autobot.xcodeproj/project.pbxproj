@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E27F190BF6AB0A827DA2F36 /* Pods_AutobotUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC84B57E81AD8AA16B5CCA8 /* Pods_AutobotUITests.framework */; };
+		9A7C93D28B0AB94EBCCBE748 /* Pods_AutobotTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 211A1810779B1AA0523343E3 /* Pods_AutobotTests.framework */; };
+		A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */; };
+		FA4CA5341D66D582006FFB36 /* Optimus_Prime.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */; };
+		FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */; };
+		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
+		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
 		FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */; };
 		FAF8D71C1D62D1B700C70D90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D71B1D62D1B700C70D90 /* ViewController.swift */; };
 		FAF8D71F1D62D1B700C70D90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF8D71D1D62D1B700C70D90 /* Main.storyboard */; };
@@ -14,6 +21,9 @@
 		FAF8D7241D62D1B700C70D90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF8D7221D62D1B700C70D90 /* LaunchScreen.storyboard */; };
 		FAF8D72F1D62D1B700C70D90 /* AutobotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D72E1D62D1B700C70D90 /* AutobotTests.swift */; };
 		FAF8D73A1D62D1B700C70D90 /* AutobotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D7391D62D1B700C70D90 /* AutobotUITests.swift */; };
+		FAF8D7481D62D41000C70D90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */; };
+		FAF8D7491D62D41000C70D90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */; };
+		FAF8D74A1D62D41000C70D90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +44,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1611AA913F73A51D56F77C51 /* Pods-Autobot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Autobot.release.xcconfig"; path = "Pods/Target Support Files/Pods-Autobot/Pods-Autobot.release.xcconfig"; sourceTree = "<group>"; };
+		211A1810779B1AA0523343E3 /* Pods_AutobotTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AutobotTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		670E2708E6D5027DD2FE0905 /* Pods-AutobotTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests.release.xcconfig"; sourceTree = "<group>"; };
+		7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Autobot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BC84B57E81AD8AA16B5CCA8 /* Pods_AutobotUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AutobotUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1CE19C1D6093F7E6980D457 /* Pods-AutobotUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotUITests/Pods-AutobotUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B8B14B42BB2507E0C4526E44 /* Pods-AutobotUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotUITests/Pods-AutobotUITests.release.xcconfig"; sourceTree = "<group>"; };
+		BF6434B15E009651A2D117FC /* Pods-AutobotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Autobot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Autobot/Pods-Autobot.debug.xcconfig"; sourceTree = "<group>"; };
+		FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Optimus_Prime.png; path = ../../../../Downloads/Optimus_Prime.png; sourceTree = "<group>"; };
+		FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
+		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		FAF8D7161D62D1B700C70D90 /* Autobot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autobot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAF8D71B1D62D1B700C70D90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +70,10 @@
 		FAF8D7351D62D1B700C70D90 /* AutobotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AutobotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF8D7391D62D1B700C70D90 /* AutobotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutobotUITests.swift; sourceTree = "<group>"; };
 		FAF8D73B1D62D1B700C70D90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Autobot-Bridging-Header.h"; sourceTree = "<group>"; };
+		FAF8D74C1D62D7BE00C70D90 /* AutobotTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AutobotTests-Bridging-Header.h"; path = "../Autobot/AutobotTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		FAF8D74D1D62D7BE00C70D90 /* AutobotUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AutobotUITests-Bridging-Header.h"; path = "../Autobot/AutobotUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A7C93D28B0AB94EBCCBE748 /* Pods_AutobotTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,19 +97,46 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E27F190BF6AB0A827DA2F36 /* Pods_AutobotUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A7DB54A688A034DD4D8BC63 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */,
+				1611AA913F73A51D56F77C51 /* Pods-Autobot.release.xcconfig */,
+				BF6434B15E009651A2D117FC /* Pods-AutobotTests.debug.xcconfig */,
+				670E2708E6D5027DD2FE0905 /* Pods-AutobotTests.release.xcconfig */,
+				B1CE19C1D6093F7E6980D457 /* Pods-AutobotUITests.debug.xcconfig */,
+				B8B14B42BB2507E0C4526E44 /* Pods-AutobotUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A93F87F411C8EF88EDA757D6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */,
+				211A1810779B1AA0523343E3 /* Pods_AutobotTests.framework */,
+				9BC84B57E81AD8AA16B5CCA8 /* Pods_AutobotUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FAF8D70D1D62D1B700C70D90 = {
 			isa = PBXGroup;
 			children = (
+				FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */,
 				FAF8D7181D62D1B700C70D90 /* Autobot */,
 				FAF8D72D1D62D1B700C70D90 /* AutobotTests */,
 				FAF8D7381D62D1B700C70D90 /* AutobotUITests */,
 				FAF8D7171D62D1B700C70D90 /* Products */,
+				3A7DB54A688A034DD4D8BC63 /* Pods */,
+				A93F87F411C8EF88EDA757D6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,12 +153,17 @@
 		FAF8D7181D62D1B700C70D90 /* Autobot */ = {
 			isa = PBXGroup;
 			children = (
+				FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */,
 				FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */,
 				FAF8D71B1D62D1B700C70D90 /* ViewController.swift */,
+				FAF6E3671D646C6B00D6C249 /* MainView.swift */,
+				FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */,
+				FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */,
 				FAF8D71D1D62D1B700C70D90 /* Main.storyboard */,
 				FAF8D7201D62D1B700C70D90 /* Assets.xcassets */,
 				FAF8D7221D62D1B700C70D90 /* LaunchScreen.storyboard */,
 				FAF8D7251D62D1B700C70D90 /* Info.plist */,
+				FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */,
 			);
 			path = Autobot;
 			sourceTree = "<group>";
@@ -110,6 +171,7 @@
 		FAF8D72D1D62D1B700C70D90 /* AutobotTests */ = {
 			isa = PBXGroup;
 			children = (
+				FAF8D74C1D62D7BE00C70D90 /* AutobotTests-Bridging-Header.h */,
 				FAF8D72E1D62D1B700C70D90 /* AutobotTests.swift */,
 				FAF8D7301D62D1B700C70D90 /* Info.plist */,
 			);
@@ -119,6 +181,7 @@
 		FAF8D7381D62D1B700C70D90 /* AutobotUITests */ = {
 			isa = PBXGroup;
 			children = (
+				FAF8D74D1D62D7BE00C70D90 /* AutobotUITests-Bridging-Header.h */,
 				FAF8D7391D62D1B700C70D90 /* AutobotUITests.swift */,
 				FAF8D73B1D62D1B700C70D90 /* Info.plist */,
 			);
@@ -132,9 +195,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAF8D73E1D62D1B700C70D90 /* Build configuration list for PBXNativeTarget "Autobot" */;
 			buildPhases = (
+				E3CDF92B39AF70D22C96ED43 /* [CP] Check Pods Manifest.lock */,
 				FAF8D7121D62D1B700C70D90 /* Sources */,
 				FAF8D7131D62D1B700C70D90 /* Frameworks */,
 				FAF8D7141D62D1B700C70D90 /* Resources */,
+				356545540C361E42D2989127 /* [CP] Embed Pods Frameworks */,
+				288DF8B46B067CF8E2537B24 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -149,9 +215,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAF8D7411D62D1B700C70D90 /* Build configuration list for PBXNativeTarget "AutobotTests" */;
 			buildPhases = (
+				4C32967C0EBDE78A241C02AE /* [CP] Check Pods Manifest.lock */,
 				FAF8D7261D62D1B700C70D90 /* Sources */,
 				FAF8D7271D62D1B700C70D90 /* Frameworks */,
 				FAF8D7281D62D1B700C70D90 /* Resources */,
+				1463D0989EE6E10E4279D9EA /* [CP] Embed Pods Frameworks */,
+				E3BF8885410212A405D3EA49 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -167,9 +236,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAF8D7441D62D1B700C70D90 /* Build configuration list for PBXNativeTarget "AutobotUITests" */;
 			buildPhases = (
+				C68D8AE02A1CD78EA92CA8E2 /* [CP] Check Pods Manifest.lock */,
 				FAF8D7311D62D1B700C70D90 /* Sources */,
 				FAF8D7321D62D1B700C70D90 /* Frameworks */,
 				FAF8D7331D62D1B700C70D90 /* Resources */,
+				55B1D4D6878FD0B5419D778B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -230,7 +301,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAF8D7241D62D1B700C70D90 /* LaunchScreen.storyboard in Resources */,
+				FAF8D7481D62D41000C70D90 /* GoogleService-Info.plist in Resources */,
 				FAF8D7211D62D1B700C70D90 /* Assets.xcassets in Resources */,
+				FA4CA5341D66D582006FFB36 /* Optimus_Prime.png in Resources */,
 				FAF8D71F1D62D1B700C70D90 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAF8D7491D62D41000C70D90 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,10 +320,134 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAF8D74A1D62D41000C70D90 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1463D0989EE6E10E4279D9EA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		288DF8B46B067CF8E2537B24 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Autobot/Pods-Autobot-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		356545540C361E42D2989127 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Autobot/Pods-Autobot-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4C32967C0EBDE78A241C02AE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		55B1D4D6878FD0B5419D778B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AutobotUITests/Pods-AutobotUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C68D8AE02A1CD78EA92CA8E2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E3BF8885410212A405D3EA49 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E3CDF92B39AF70D22C96ED43 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FAF8D7121D62D1B700C70D90 /* Sources */ = {
@@ -257,7 +455,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAF8D71C1D62D1B700C70D90 /* ViewController.swift in Sources */,
+				FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */,
 				FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */,
+				FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */,
+				FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,68 +600,89 @@
 		};
 		FAF8D73F1D62D1B700C70D90 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Autobot/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = agam.Autobot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.practo.autobot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/Autobot-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		FAF8D7401D62D1B700C70D90 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1611AA913F73A51D56F77C51 /* Pods-Autobot.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Autobot/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = agam.Autobot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.practo.autobot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/Autobot-Bridging-Header.h";
 			};
 			name = Release;
 		};
 		FAF8D7421D62D1B700C70D90 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF6434B15E009651A2D117FC /* Pods-AutobotTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AutobotTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = agam.AutobotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/AutobotTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Autobot.app/Autobot";
 			};
 			name = Debug;
 		};
 		FAF8D7431D62D1B700C70D90 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 670E2708E6D5027DD2FE0905 /* Pods-AutobotTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AutobotTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = agam.AutobotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/AutobotTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Autobot.app/Autobot";
 			};
 			name = Release;
 		};
 		FAF8D7451D62D1B700C70D90 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B1CE19C1D6093F7E6980D457 /* Pods-AutobotUITests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AutobotUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = agam.AutobotUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/AutobotUITests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_TARGET_NAME = Autobot;
 			};
 			name = Debug;
 		};
 		FAF8D7461D62D1B700C70D90 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8B14B42BB2507E0C4526E44 /* Pods-AutobotUITests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = AutobotUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = agam.AutobotUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/AutobotUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Autobot;
 			};
 			name = Release;
@@ -484,6 +706,7 @@
 				FAF8D7401D62D1B700C70D90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FAF8D7411D62D1B700C70D90 /* Build configuration list for PBXNativeTarget "AutobotTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +715,7 @@
 				FAF8D7431D62D1B700C70D90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FAF8D7441D62D1B700C70D90 /* Build configuration list for PBXNativeTarget "AutobotUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +724,7 @@
 				FAF8D7461D62D1B700C70D90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
