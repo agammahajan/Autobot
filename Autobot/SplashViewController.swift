@@ -12,26 +12,17 @@ import UIKit
 class SplashViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        addBackgroundImage()
-        let timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(SplashViewController.check), userInfo: nil, repeats: false)
+
+        _ = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(SplashViewController.check), userInfo: nil, repeats: false)
         
     }
     
-    func addBackgroundImage(){
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        
-        let bg = UIImage(named: "Optimus_Prime.png")
-        let bgView = UIImageView(image: bg)
-        
-        bgView.frame = CGRectMake(10, 10, screenSize.width, screenSize.height)
-        self.view.addSubview(bgView)
-    }
     
     func check(){
         if GIDSignIn.sharedInstance().hasAuthInKeychain(){
             //already Signed
             //Go to main view
-            MoveToNextView("NavigationView")
+            MoveToNextView("TabView")
         }
         else{
             //Go to login screen

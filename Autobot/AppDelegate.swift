@@ -193,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         //Go to next view
         dispatch_async(dispatch_get_main_queue(),{
             let board = UIStoryboard(name: "Main" , bundle: nil)
-            let tempView = board.instantiateViewControllerWithIdentifier("NavigationView")
+            let tempView = board.instantiateViewControllerWithIdentifier("TabView")
             
             self.window!.rootViewController = tempView
             

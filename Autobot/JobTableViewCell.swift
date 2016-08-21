@@ -12,7 +12,7 @@ import Foundation
 
 class JobTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var idLabel: UILabel!
+
     @IBOutlet weak var passedLabel: UILabel!
     @IBOutlet weak var projectNameLabel: UILabel!
     @IBOutlet weak var failedLabel: UILabel!
@@ -21,29 +21,6 @@ class JobTableViewCell: UITableViewCell {
     @IBOutlet weak var profilePic: UIImageView!
     
     
-    
-  
-    
-    //    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-    //        return 1
-    //    }
-    //
-    //    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    //        return 10
-    //    }
-    //
-    ////    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    ////        return "Section \(section)"
-    ////    }
-    //
-    //    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    //        let cell = tableView.dequeueReusableCellWithIdentifier("LabelCell", forIndexPath: indexPath)
-    //
-    //
-    //        cell.textLabel?.text = "Row \(indexPath.row)"
-    //        
-    //        return cell
-    //    }
-    
+
 
 }

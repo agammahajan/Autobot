@@ -10,7 +10,6 @@
 		3E27F190BF6AB0A827DA2F36 /* Pods_AutobotUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC84B57E81AD8AA16B5CCA8 /* Pods_AutobotUITests.framework */; };
 		9A7C93D28B0AB94EBCCBE748 /* Pods_AutobotTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 211A1810779B1AA0523343E3 /* Pods_AutobotTests.framework */; };
 		A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */; };
-		FA4CA5341D66D582006FFB36 /* Optimus_Prime.png in Resources */ = {isa = PBXBuildFile; fileRef = FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */; };
 		FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */; };
 		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
 		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
@@ -53,7 +52,6 @@
 		B8B14B42BB2507E0C4526E44 /* Pods-AutobotUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotUITests/Pods-AutobotUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BF6434B15E009651A2D117FC /* Pods-AutobotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Autobot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Autobot/Pods-Autobot.debug.xcconfig"; sourceTree = "<group>"; };
-		FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Optimus_Prime.png; path = ../../../../Downloads/Optimus_Prime.png; sourceTree = "<group>"; };
 		FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
 		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		FAF8D7181D62D1B700C70D90 /* Autobot */ = {
 			isa = PBXGroup;
 			children = (
-				FA4CA5331D66D582006FFB36 /* Optimus_Prime.png */,
 				FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */,
 				FAF8D71B1D62D1B700C70D90 /* ViewController.swift */,
 				FAF6E3671D646C6B00D6C249 /* MainView.swift */,
@@ -303,7 +300,6 @@
 				FAF8D7241D62D1B700C70D90 /* LaunchScreen.storyboard in Resources */,
 				FAF8D7481D62D41000C70D90 /* GoogleService-Info.plist in Resources */,
 				FAF8D7211D62D1B700C70D90 /* Assets.xcassets in Resources */,
-				FA4CA5341D66D582006FFB36 /* Optimus_Prime.png in Resources */,
 				FAF8D71F1D62D1B700C70D90 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

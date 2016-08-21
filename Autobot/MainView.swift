@@ -32,6 +32,7 @@ class MainView : UITableViewController {
     var item: NSDictionary?
     var url: NSURL!
     var Token: String?
+
  
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -52,9 +53,9 @@ class MainView : UITableViewController {
       
         item = items[indexPath.row] as? NSDictionary
         if item != nil {
-            cell.idLabel.text = "\(item!["id"]!)"
+            //cell.idLabel.text = "\(item!["id"]!)"
             cell.runFailedLabel.text = "\(item!["runFailed"]!)"
-            cell.projectNameLabel.text = "\(item!["projectName"]!)"
+            cell.projectNameLabel.text = "\(item!["id"]!)" + "(\(item!["projectName"]!))"
             cell.passedLabel.text = "\(item!["passed"]!) passed"
             cell.failedLabel.text = "\(item!["failed"]!) failed"
             
@@ -63,11 +64,10 @@ class MainView : UITableViewController {
             let fullNameArr: String = temp[0]
             cell.emailLabel.text = fullNameArr.uppercaseFirst
             url = NSURL(string: "\(item!["picture"] == nil ? "" : item!["picture"]!)")
-//            print(url)
-            
-          
+//
             cell.profilePic.sd_setImageWithURL(url)
-            
+            cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
+            cell.profilePic.clipsToBounds = true
   
         }
         return cell
@@ -82,7 +82,7 @@ class MainView : UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         //Auto Refresh
-        var timer = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        _ = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
         //Getting defaults
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -91,8 +91,7 @@ class MainView : UITableViewController {
         
 //         let Name = defaults.stringForKey("NameKey")
 //            //print(Name)
-        
-        
+   
         
         Request()
         
