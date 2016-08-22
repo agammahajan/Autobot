@@ -32,6 +32,33 @@ class MainView : UITableViewController {
     var item: NSDictionary?
     var url: NSURL!
     var Token: String?
+    
+
+    
+    
+    
+    //for loading indicator
+    var messageFrame = UIView()
+    var activityIndicator = UIActivityIndicatorView()
+    var strLabel = UILabel()
+    
+    func progressBarDisplayer(msg:String, _ indicator:Bool ) {
+        print(msg)
+        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
+        strLabel.text = msg
+        strLabel.textColor = UIColor.whiteColor()
+        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90, y: view.frame.midY + 50 , width: 180, height: 50))
+        messageFrame.layer.cornerRadius = 15
+        messageFrame.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        if indicator {
+            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+            activityIndicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+            activityIndicator.startAnimating()
+            messageFrame.addSubview(activityIndicator)
+        }
+        messageFrame.addSubview(strLabel)
+        view.addSubview(messageFrame)
+    }
 
  
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -69,10 +96,13 @@ class MainView : UITableViewController {
             cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
             cell.profilePic.clipsToBounds = true
             
-            //hide indicator
+            //hide activity indicator
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-  
+            
+            
         }
+        messageFrame.hidden = true
+        
         return cell
     }
    
@@ -81,20 +111,22 @@ class MainView : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.messageFrame.hidden = false
+        progressBarDisplayer("Fetching Jobs", true)
+        
+        
+        
         //Pull to refresh
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         //Auto Refresh
-        _ = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
         //Getting defaults
         let defaults = NSUserDefaults.standardUserDefaults()
         Token = defaults.stringForKey("TokenKey")
-            //print(Token!)
-        
-//         let Name = defaults.stringForKey("NameKey")
-//            //print(Name)
-   
+            print(Token!)
+       
         
         
         Request()
@@ -104,24 +136,18 @@ class MainView : UITableViewController {
     func Request() {
         
         let url:NSURL = NSURL(string: "https://autobot.practodev.com/api/v1/jobs?limit=10")!
-        
-        
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.addValue(Token!, forHTTPHeaderField: "apiToken")
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) {
             data, response,  error in
-
+            
             if error != nil {
                 print("error=\(error)")
                 
                 return
             }
-//            // Print out response string
-//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//            print("responseString = \(responseString)")
-            
             // Convert server json response to NSDictionary
             do {
                   self.convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary
@@ -130,36 +156,29 @@ class MainView : UITableViewController {
                     //print(self.convertedJsonIntoDict)
                 
                     self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
-                    print(self.items[0]["id"])
+                    //print(self.items[0]["id"])
                 print("Data Fetched")
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.reloadData()
-                    
                 })
-                
-                
-                    
-                   
-                    
-                
+               
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
-
         }
-        
         task.resume()
     }
     
     func refresh(sender:AnyObject){
+        //pull to Refresh
         print("Refresh")
         Request()
         self.refreshControl?.endRefreshing()
     }
     
     func update() {
-        //show indicator
+        //show activity indicator
         
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
@@ -168,25 +187,6 @@ class MainView : UITableViewController {
             print("AutoRefresh!")
             Request()
         }
-        
-    }
-    
-    
-    @IBAction func didTapSignOut(sender: AnyObject) {
-        dispatch_async(dispatch_get_main_queue(),{
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            
-            let temp = storyBoard.instantiateViewControllerWithIdentifier("ViewController") as UIViewController
-            self.presentViewController(temp, animated:true, completion:nil)
-            
-            
-            }
-        )
-        
-        //Setting Defaults
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setBool(false, forKey: "Signed")
-        GIDSignIn.sharedInstance().signOut()
         
     }
     

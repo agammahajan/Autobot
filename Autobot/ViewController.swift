@@ -16,6 +16,7 @@ class ViewController: UIViewController, GIDSignInUIDelegate {
     @IBOutlet weak var labelView: UIView!
     
     
+    //for loading indicator
     var messageFrame = UIView()
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
@@ -41,11 +42,9 @@ class ViewController: UIViewController, GIDSignInUIDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Optimus_Prime.png")!)
-//        backgroundImage.image = UIImage(named: "Optimus_Prime.png")
-        labelView.backgroundColor = UIColor(white: 1, alpha: 0.2)
-//        progressBarDisplayer("Signing in", false)
         
+//        progressBarDisplayer("Signing in", false)
+        labelView.backgroundColor = UIColor(white: 1, alpha: 0.2)
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.loginViewController = self
         

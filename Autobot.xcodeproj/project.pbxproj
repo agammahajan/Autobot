@@ -12,6 +12,7 @@
 		A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */; };
 		FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */; };
 		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
+		FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */; };
 		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
 		FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */; };
 		FAF8D71C1D62D1B700C70D90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D71B1D62D1B700C70D90 /* ViewController.swift */; };
@@ -54,6 +55,7 @@
 		C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Autobot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Autobot/Pods-Autobot.debug.xcconfig"; sourceTree = "<group>"; };
 		FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
+		FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		FAF8D7161D62D1B700C70D90 /* Autobot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autobot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */,
 				FAF8D71B1D62D1B700C70D90 /* ViewController.swift */,
 				FAF6E3671D646C6B00D6C249 /* MainView.swift */,
+				FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */,
 				FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */,
 				FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */,
 				FAF8D71D1D62D1B700C70D90 /* Main.storyboard */,
@@ -453,6 +456,7 @@
 				FAF8D71C1D62D1B700C70D90 /* ViewController.swift in Sources */,
 				FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */,
 				FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */,
+				FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */,
 				FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */,
 				FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */,
 			);

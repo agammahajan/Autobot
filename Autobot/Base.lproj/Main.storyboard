@@ -112,16 +112,16 @@
         <scene sceneID="FmH-xb-WMr">
             <objects>
                 <tableViewController storyboardIdentifier="MainView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lJO-VR-Rmz" customClass="MainView" customModule="Autobot" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="120" sectionHeaderHeight="28" sectionFooterHeight="28" id="uWc-m0-c0T">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" sectionHeaderHeight="28" sectionFooterHeight="28" id="uWc-m0-c0T">
                         <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabelCell" rowHeight="150" id="x2N-a1-M76" customClass="JobTableViewCell" customModule="Autobot" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="150"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="LabelCell" rowHeight="110" id="x2N-a1-M76" customClass="JobTableViewCell" customModule="Autobot" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x2N-a1-M76" id="EXt-VW-ZHf">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="149.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="109.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g7N-dA-NIR">
@@ -140,7 +140,7 @@
                                                 <constraint firstAttribute="height" constant="20" id="ITq-LQ-zRt"/>
                                                 <constraint firstAttribute="width" constant="104" id="ip0-Gl-1zl"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.16086515784263611" green="0.70478016138076782" blue="0.083568580448627472" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -165,7 +165,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cbl-8c-YKt">
-                                            <rect key="frame" x="18" y="46" width="57" height="57"/>
+                                            <rect key="frame" x="18" y="26.5" width="57" height="57"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="57" id="3ws-0l-mxx"/>
                                                 <constraint firstAttribute="height" constant="57" id="6ok-jl-9Y2"/>
@@ -177,7 +177,7 @@
                                                 <constraint firstAttribute="height" constant="20" id="Ero-Pd-fmr"/>
                                                 <constraint firstAttribute="width" constant="89" id="P90-tu-spo"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.99946612119674683" green="0.094218753278255463" blue="0.0030295781325548887" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -213,13 +213,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Item" id="SfN-Kw-ofz"/>
-                    <navigationItem key="navigationItem" title="JOBS" id="6yC-DE-rKq">
-                        <barButtonItem key="rightBarButtonItem" title="SignOut" id="sUn-re-WnS">
-                            <connections>
-                                <action selector="didTapSignOut:" destination="lJO-VR-Rmz" id="B9a-7Q-Tuk"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="JOBS" id="6yC-DE-rKq"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="qB9-4d-TLK">
                         <autoresizingMask key="autoresizingMask"/>
@@ -252,7 +246,7 @@
         <!--Me-->
         <scene sceneID="dng-oa-HhQ">
             <objects>
-                <viewController title="Me" id="ytq-zs-xX3" sceneMemberID="viewController">
+                <viewController title="Me" id="ytq-zs-xX3" customClass="MoreViewController" customModule="Autobot" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UKy-Bd-WJj"/>
                         <viewControllerLayoutGuide type="bottom" id="5D4-ex-5gm"/>
@@ -260,10 +254,66 @@
                     <view key="view" contentMode="scaleToFill" id="0Ss-I2-yzL">
                         <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bGd-Sd-brA">
+                                <rect key="frame" x="20" y="20" width="99" height="99"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="99" id="H72-2I-qZj"/>
+                                    <constraint firstAttribute="width" constant="99" id="rKW-Hh-ZOF"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mE4-92-6Ii">
+                                <rect key="frame" x="139" y="59" width="255" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Lpw-IF-uSw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gtr-Uc-1q6">
+                                <rect key="frame" x="20" y="155" width="374" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="WWN-Bm-d3h"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nBv-Br-xFm">
+                                <rect key="frame" x="20" y="199" width="99" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="99" id="9hY-kY-4e9"/>
+                                    <constraint firstAttribute="height" constant="30" id="sFH-q1-uVY"/>
+                                </constraints>
+                                <state key="normal" title="SignOut"/>
+                                <connections>
+                                    <action selector="didTapSignOut:" destination="ytq-zs-xX3" eventType="touchUpInside" id="Wzm-Tw-UwV"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mE4-92-6Ii" firstAttribute="top" secondItem="UKy-Bd-WJj" secondAttribute="bottom" constant="59" id="2Np-x0-fFm"/>
+                            <constraint firstItem="mE4-92-6Ii" firstAttribute="leading" secondItem="bGd-Sd-brA" secondAttribute="trailing" constant="20" id="Mgg-mh-d5t"/>
+                            <constraint firstItem="Gtr-Uc-1q6" firstAttribute="top" secondItem="bGd-Sd-brA" secondAttribute="bottom" constant="36" id="TRb-hy-3h7"/>
+                            <constraint firstItem="mE4-92-6Ii" firstAttribute="trailing" secondItem="0Ss-I2-yzL" secondAttribute="trailingMargin" id="X2F-cj-WxU"/>
+                            <constraint firstItem="bGd-Sd-brA" firstAttribute="leading" secondItem="0Ss-I2-yzL" secondAttribute="leadingMargin" id="cDS-sD-q8W"/>
+                            <constraint firstItem="nBv-Br-xFm" firstAttribute="top" secondItem="Gtr-Uc-1q6" secondAttribute="bottom" constant="23" id="ehw-kD-GUG"/>
+                            <constraint firstItem="Gtr-Uc-1q6" firstAttribute="trailing" secondItem="0Ss-I2-yzL" secondAttribute="trailingMargin" id="ndZ-O9-8im"/>
+                            <constraint firstItem="nBv-Br-xFm" firstAttribute="leading" secondItem="0Ss-I2-yzL" secondAttribute="leadingMargin" id="oDp-nY-ZMO"/>
+                            <constraint firstItem="Gtr-Uc-1q6" firstAttribute="leading" secondItem="0Ss-I2-yzL" secondAttribute="leadingMargin" id="v7A-m7-cSM"/>
+                            <constraint firstItem="bGd-Sd-brA" firstAttribute="top" secondItem="UKy-Bd-WJj" secondAttribute="bottom" constant="20" id="y9Q-nl-Adg"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="ME" id="Ras-nB-PVH"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <connections>
+                        <outlet property="Name" destination="mE4-92-6Ii" id="XNc-bD-Kq9"/>
+                        <outlet property="SignOut" destination="nBv-Br-xFm" id="WLc-a0-Lf9"/>
+                        <outlet property="email" destination="Gtr-Uc-1q6" id="yCp-SH-SF3"/>
+                        <outlet property="pic" destination="bGd-Sd-brA" id="X18-0c-Xab"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IL6-p0-Bd3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

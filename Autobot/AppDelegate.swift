@@ -15,6 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
     var token: String?
     var givenName: String?
+    var email: String?
+    var pic: String?
+    
     var loginViewController: ViewController!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -93,8 +96,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
                 withError error: NSError!) {
-        
+        loginViewController.messageFrame.hidden = true
         loginViewController.progressBarDisplayer("Signing in", true)
+        loginViewController.signInButton.enabled = false
         
         if (error == nil) {
             // Perform any operations on signed in user here.
@@ -104,15 +108,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         } else {
             print("\(error.localizedDescription)")
             loginViewController.messageFrame.hidden = true
+            loginViewController.signInButton.enabled = true
+            
         }
     }
     
     func GetToken(user: GIDGoogleUser!) {
 //        let userId = user.userID                  // For client-side use only!
-//        let fullName = user.profile.name
-          givenName = user.profile.givenName
+//          givenName = user.profile.givenName
 //        let familyName = user.profile.familyName
-        let email = user.profile.email
+        
+          email = user.profile.email
+        givenName = user.profile.name
+        if user.profile.hasImage {
+            pic = user.profile.imageURLWithDimension(160).absoluteString
+            print(pic!)
+        }
+        else{
+            pic = ""
+        }
         let idToken = user.authentication.idToken // Safe to send to the server
         
         //print(idToken)
@@ -138,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             if error != nil {
                 print("error=\(error)")
-                self.loginViewController.messageFrame.hidden = true
+                
                 return
             }
             //print(response)
@@ -153,13 +167,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     
                     self.token = json["api_token"] as? String
-                
                     print(self.token!)
                     
                     //Setting Defaults
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.setObject(self.token, forKey: "TokenKey")
                     defaults.setObject(self.givenName, forKey: "NameKey")
+                    defaults.setObject(self.email, forKey: "EmailKey")
+                    defaults.setObject(self.pic, forKey: "PicKey")
+                    
+                    //for stopping auto refresh
                     defaults.setBool(true, forKey: "Signed")
                     
                     
@@ -169,27 +186,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     
                 } catch let error as NSError {
                     print("json error: \(error.localizedDescription)")
-                    
                 }
             }
             else if (StatusCode)! == 401 {
                 print("Only practo users are allowed to access")
                 self.MoveToNextView("ViewController")
-                
-                
-                
-                
                 GIDSignIn.sharedInstance().signOut()
-                
-                
             }
             else {
                 print("Dont know")
                 self.loginViewController.messageFrame.hidden = true
+                self.loginViewController.signInButton.enabled = true
                 GIDSignIn.sharedInstance().signOut()
             }
         }
-        
         task.resume()
     }
     
@@ -198,7 +208,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         dispatch_async(dispatch_get_main_queue(),{
             let board = UIStoryboard(name: "Main" , bundle: nil)
             let tempView = board.instantiateViewControllerWithIdentifier(view)
-            
             self.window!.rootViewController = tempView
             
             }
@@ -214,9 +223,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
 
     }
-    
- 
-
-
 }
 
