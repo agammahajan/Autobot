@@ -141,8 +141,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         request.HTTPBody = paramString.dataUsingEncoding(NSUTF8StringEncoding)
         
         Request(request)
-        
-        
     }
     
     func Request(request: NSMutableURLRequest) {
@@ -152,6 +150,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             if error != nil {
                 print("error=\(error)")
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.loginViewController.messageFrame.hidden = true
+                    self.loginViewController.signInButton.enabled = true
+                    GIDSignIn.sharedInstance().signOut()
+                })
                 
                 return
             }

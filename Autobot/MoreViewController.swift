@@ -58,20 +58,37 @@ class MoreViewController : UIViewController {
     
     @IBAction func didTapSignOut(sender: AnyObject) {
         
-        dispatch_async(dispatch_get_main_queue(),{
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            
-            let temp = storyBoard.instantiateViewControllerWithIdentifier("ViewController") as UIViewController
-            self.presentViewController(temp, animated:true, completion:nil)
-            
-            
-            }
-        )
+        //Create the AlertController and add Its action like button in Actionsheet
+        let actionSheetControllerIOS8: UIAlertController = UIAlertController(title: "Are you sure", message: "Select One", preferredStyle: .ActionSheet)
         
-        //Setting Defaults
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setBool(false, forKey: "Signed")
-        GIDSignIn.sharedInstance().signOut()
+        let cancelActionButton: UIAlertAction = UIAlertAction(title: "NO", style: .Cancel) { action -> Void in
+            print("Cancel")
+        }
+        actionSheetControllerIOS8.addAction(cancelActionButton)
+        
+        let saveActionButton: UIAlertAction = UIAlertAction(title: "Yes", style: .Default)
+        { action -> Void in
+            print("Yes")
+            
+                        dispatch_async(dispatch_get_main_queue(),{
+                        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            
+                        let temp = storyBoard.instantiateViewControllerWithIdentifier("ViewController") as UIViewController
+                        self.presentViewController(temp, animated:true, completion:nil)
+            
+            
+                        }
+                    )
+            
+                    //Setting Defaults
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    defaults.setBool(false, forKey: "Signed")
+                    GIDSignIn.sharedInstance().signOut()
+        }
+        actionSheetControllerIOS8.addAction(saveActionButton)
+   
+        self.presentViewController(actionSheetControllerIOS8, animated: true, completion: nil)
+
 
     }
     

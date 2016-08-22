@@ -47,7 +47,7 @@ class MainView : UITableViewController {
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
         strLabel.text = msg
         strLabel.textColor = UIColor.whiteColor()
-        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90, y: view.frame.midY + 50 , width: 180, height: 50))
+        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90, y: view.frame.midY - 10 , width: 180, height: 50))
         messageFrame.layer.cornerRadius = 15
         messageFrame.backgroundColor = UIColor(white: 0, alpha: 0.5)
         if indicator {
