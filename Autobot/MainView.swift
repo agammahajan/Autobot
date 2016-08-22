@@ -68,6 +68,9 @@ class MainView : UITableViewController {
             cell.profilePic.sd_setImageWithURL(url)
             cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
             cell.profilePic.clipsToBounds = true
+            
+            //hide indicator
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
   
         }
         return cell
@@ -92,6 +95,7 @@ class MainView : UITableViewController {
 //         let Name = defaults.stringForKey("NameKey")
 //            //print(Name)
    
+        
         
         Request()
         
@@ -155,9 +159,12 @@ class MainView : UITableViewController {
     }
     
     func update() {
+        //show indicator
+        
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
         if temp == true {
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             print("AutoRefresh!")
             Request()
         }

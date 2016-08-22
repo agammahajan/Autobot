@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
     var token: String?
     var givenName: String?
+    var loginViewController: ViewController!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -92,13 +93,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
                 withError error: NSError!) {
+        
+        loginViewController.progressBarDisplayer("Signing in", true)
+        
         if (error == nil) {
             // Perform any operations on signed in user here.
-          
+        
             GetToken(user)
-            
+           
         } else {
             print("\(error.localizedDescription)")
+            loginViewController.messageFrame.hidden = true
         }
     }
     
@@ -133,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             
             if error != nil {
                 print("error=\(error)")
-                
+                self.loginViewController.messageFrame.hidden = true
                 return
             }
             //print(response)
@@ -159,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     
                     
                     //Go to next view
-                   self.MoveToNextView()
+                   self.MoveToNextView("TabView")
                     
                     
                 } catch let error as NSError {
@@ -169,36 +174,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
             else if (StatusCode)! == 401 {
                 print("Only practo users are allowed to access")
+                self.MoveToNextView("ViewController")
                 
-                dispatch_async(dispatch_get_main_queue(), {
-                               let alert = UIAlertController(title: "Alert", message: "Only practo users are allowed to access", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
-                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
-                    }
-                )
+                
                 
                 
                 GIDSignIn.sharedInstance().signOut()
                 
+                
             }
             else {
                 print("Dont know")
+                self.loginViewController.messageFrame.hidden = true
+                GIDSignIn.sharedInstance().signOut()
             }
         }
         
         task.resume()
     }
     
-    func MoveToNextView(){
+    func MoveToNextView(view: String){
         //Go to next view
         dispatch_async(dispatch_get_main_queue(),{
             let board = UIStoryboard(name: "Main" , bundle: nil)
-            let tempView = board.instantiateViewControllerWithIdentifier("TabView")
+            let tempView = board.instantiateViewControllerWithIdentifier(view)
             
             self.window!.rootViewController = tempView
             
             }
         )
+        
+        if view == "ViewController" {
+            dispatch_async(dispatch_get_main_queue(), {
+                let alert = UIAlertController(title: "Alert", message: "Only practo users are allowed to access", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+                self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+                }
+            )
+        }
 
     }
     
