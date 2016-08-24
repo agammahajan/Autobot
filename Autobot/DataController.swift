@@ -12,6 +12,7 @@ class DataController: NSObject {
     static let sharedInstance = DataController()
     var managedObjectContext: NSManagedObjectContext
     
+    
     override  init() {
         // This resource is the same name as your xcdatamodeld contained in your project.
         guard let modelURL = NSBundle.mainBundle().URLForResource("JobsModel", withExtension:"momd") else {

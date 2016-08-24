@@ -1,4 +1,4 @@
-//
+ //
 //  MainView.swift
 //  Autobot
 //
@@ -25,24 +25,72 @@ extension String {
 }
 
 
-class MainView : UITableViewController {
+class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UISearchResultsUpdating , UISearchBarDelegate {
     
     var convertedJsonIntoDict: NSDictionary!
     var items = [AnyObject]()
-    var jobsDB: [Jobs]?
+    var jobsDB: [Jobs] = []
     var item: NSDictionary?
     var iterator: Jobs? = nil
     var url: NSURL!
     var Token: String?
     
+    var fetchedResultsController: NSFetchedResultsController?
 
-    
-    
+    var searchController: UISearchController!
+    var showSearchResuts: Bool = false
+    var filteredJobs: [Jobs] = []
     
     //for loading indicator
     var messageFrame = UIView()
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
+    
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        showSearchResuts = true
+        tableView.reloadData()
+    }
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        showSearchResuts = false
+        tableView.reloadData()
+    }
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        if !showSearchResuts {
+            showSearchResuts = true
+            tableView.reloadData()
+        }
+        searchController.searchBar.resignFirstResponder()
+    }
+    
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        let searchString = searchController.searchBar.text
+        
+        filteredJobs = (fetchedResultsController?.fetchedObjects as! [Jobs]).filter({ (job) -> Bool in
+            if searchString == "" {
+                return true
+            }
+            return (job.id?.rangeOfString(searchString! , options: NSStringCompareOptions.CaseInsensitiveSearch)) != nil
+        })
+        tableView.reloadData()
+    }
+    func configureSearchController(){
+        
+        searchController = UISearchController(searchResultsController: nil)
+        self.extendedLayoutIncludesOpaqueBars = true
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = true
+        searchController.searchBar.placeholder = "Search a Project"
+        searchController.searchBar.delegate = self
+        searchController.searchBar.sizeToFit()
+        self.definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        tableView.tableFooterView = UIView(frame: CGRectZero)
+        searchController.hidesNavigationBarDuringPresentation = true
+//        searchController.hidesNavigationBarDuringPresentation = false
+    }
+    
     
     func progressBarDisplayer(msg:String, _ indicator:Bool ) {
         print(msg)
@@ -68,8 +116,13 @@ class MainView : UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return jobsDB?.count ?? 0
-        
+        if showSearchResuts == true {
+            return filteredJobs.count
+        }
+        if fetchedResultsController != nil {
+            return (fetchedResultsController!.sections?[section].numberOfObjects)!
+        }
+            return 0
     }
     
 //    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -80,7 +133,7 @@ class MainView : UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("LabelCell", forIndexPath: indexPath) as! JobTableViewCell
 
-        iterator = jobsDB?[indexPath.row]
+        iterator = (showSearchResuts ? filteredJobs[indexPath.row] : fetchedResultsController!.objectAtIndexPath(indexPath) )as? Jobs
         if iterator != nil {
             cell.runFailedLabel.text = iterator?.run_failed
             cell.projectNameLabel.text = (iterator?.id)! + "(\((iterator?.project_name)!))"
@@ -108,16 +161,18 @@ class MainView : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //fetch()
+        configureSearchController()
         
+        //fetch()
+        self.fetch_new()
         self.messageFrame.hidden = false
         progressBarDisplayer("Fetching Jobs", true)
         
         //Pull to refresh
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
-        //Auto Refresh
-        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+//        //Auto Refresh
+//        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
         //Getting defaults
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -137,9 +192,6 @@ class MainView : UITableViewController {
             
             if error != nil {
                 print("error=\(error)")
-                
-                self.fetch()
-                
                 return
             }
             // Convert server json response to NSDictionary
@@ -149,9 +201,9 @@ class MainView : UITableViewController {
                 self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
                 print("Data fetched from api")
                 
-                self.delete()
+//                self.delete()
                 self.save_data(self.items)
-                self.fetch()
+//                self.fetch()
                 
                 //hide activity indicator
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -219,25 +271,25 @@ class MainView : UITableViewController {
     }
     
     
-    func fetch() {
-        let moc = DataController.sharedInstance.managedObjectContext
-        let Fetch = NSFetchRequest(entityName: "Jobs")
-        
-        do {
-            if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
-            
-            
-             jobsDB = fetchedJobs
-             dispatch_async(dispatch_get_main_queue(), {
-
-                    self.tableView.reloadData()
-               })
-            }
-           print("Data fetched from DB")
-        } catch {
-            fatalError("Failed to fetch jobs: \(error)")
-        }
-    }
+//    func fetch() {
+//        let moc = DataController.sharedInstance.managedObjectContext
+//        let Fetch = NSFetchRequest(entityName: "Jobs")
+//        
+//        do {
+//            if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
+//            
+//            
+//            // jobsDB = fetchedJobs
+//             dispatch_async(dispatch_get_main_queue(), {
+//
+//                    self.tableView.reloadData()
+//               })
+//            }
+//           print("Data fetched from DB")
+//        } catch {
+//            fatalError("Failed to fetch jobs: \(error)")
+//        }
+//    }
     
     func delete(){
         let moc = DataController.sharedInstance.managedObjectContext
@@ -251,4 +303,63 @@ class MainView : UITableViewController {
             fatalError("Failed to delete jobs: \(error)")
         }
     }
+    
+    func fetch_new() {
+        let moc = DataController.sharedInstance.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "Jobs")
+        let fetchSort = NSSortDescriptor(key: "id", ascending: false)
+        fetchRequest.sortDescriptors = [fetchSort]
+        fetchRequest.fetchBatchSize = 10
+        //2
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController?.delegate = self
+        
+        //3
+        do {
+            try fetchedResultsController!.performFetch()
+            
+        } catch let error as NSError {
+            print("Unable to perform fetch: \(error.localizedDescription)")
+        }
+    }
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        // 1
+        switch type {
+        case .Insert: 
+            tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Automatic)
+        
+        default: break
+        
+        }
+        
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        // 2
+        switch type {
+        case .Insert:
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+        case .Delete:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Update:
+            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .Move:
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+
+        }
+    }
+
 }

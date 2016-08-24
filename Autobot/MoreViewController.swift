@@ -47,7 +47,7 @@ class MoreViewController : UIViewController {
         UserPic = defaults.stringForKey("PicKey")
         print(UserPic!)
         let url:NSURL = NSURL(string: UserPic!)!
-        pic.sd_setImageWithURL(url)
+        pic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "HomeScreen"))
         pic.layer.cornerRadius = pic.frame.size.width / 2;
         pic.clipsToBounds = true
         
