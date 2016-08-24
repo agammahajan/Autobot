@@ -113,8 +113,6 @@ class MainView : UITableViewController {
         self.messageFrame.hidden = false
         progressBarDisplayer("Fetching Jobs", true)
         
-        
-        
         //Pull to refresh
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
@@ -125,17 +123,10 @@ class MainView : UITableViewController {
         let defaults = NSUserDefaults.standardUserDefaults()
         Token = defaults.stringForKey("TokenKey")
             print(Token!)
-       
-        
-        
         Request()
-        
     }
     
     func Request() {
-    
-
-        
         let url:NSURL = NSURL(string: "https://autobot.practodev.com/api/v1/jobs?limit=10")!
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
@@ -158,9 +149,9 @@ class MainView : UITableViewController {
                 self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
                 print("Data fetched from api")
                 
+                self.delete()
                 self.save_data(self.items)
                 self.fetch()
-               
                 
                 //hide activity indicator
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -248,4 +239,16 @@ class MainView : UITableViewController {
         }
     }
     
+    func delete(){
+        let moc = DataController.sharedInstance.managedObjectContext
+        let ReqVar = NSFetchRequest(entityName: "Jobs")
+        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: ReqVar)
+        do {
+            try moc.executeRequest(DelAllReqVar)
+            print("Data deleted from DB")
+        }
+        catch {
+            fatalError("Failed to delete jobs: \(error)")
+        }
+    }
 }
