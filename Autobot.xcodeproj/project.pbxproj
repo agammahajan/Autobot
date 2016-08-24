@@ -10,7 +10,11 @@
 		3E27F190BF6AB0A827DA2F36 /* Pods_AutobotUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC84B57E81AD8AA16B5CCA8 /* Pods_AutobotUITests.framework */; };
 		9A7C93D28B0AB94EBCCBE748 /* Pods_AutobotTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 211A1810779B1AA0523343E3 /* Pods_AutobotTests.framework */; };
 		A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC83798170F7700B8F584F9 /* Pods_Autobot.framework */; };
+		FA01219D1D6C3908008CB44E /* JobsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FA01219B1D6C3908008CB44E /* JobsModel.xcdatamodeld */; };
+		FA01219F1D6C3A84008CB44E /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA01219E1D6C3A84008CB44E /* DataController.swift */; };
 		FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */; };
+		FA6E3E831D6CC7C3000F788A /* Jobs+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6E3E811D6CC7C3000F788A /* Jobs+CoreDataProperties.swift */; };
+		FA6E3E841D6CC7C3000F788A /* Jobs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6E3E821D6CC7C3000F788A /* Jobs.swift */; };
 		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
 		FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */; };
 		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
@@ -53,7 +57,11 @@
 		B8B14B42BB2507E0C4526E44 /* Pods-AutobotUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotUITests/Pods-AutobotUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BF6434B15E009651A2D117FC /* Pods-AutobotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AutobotTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AutobotTests/Pods-AutobotTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C9AEDC75ED067CF18D272013 /* Pods-Autobot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Autobot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Autobot/Pods-Autobot.debug.xcconfig"; sourceTree = "<group>"; };
+		FA01219C1D6C3908008CB44E /* JobsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobsModel.xcdatamodel; sourceTree = "<group>"; };
+		FA01219E1D6C3A84008CB44E /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		FA6E3E811D6CC7C3000F788A /* Jobs+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Jobs+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FA6E3E821D6CC7C3000F788A /* Jobs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Jobs.swift; sourceTree = "<group>"; };
 		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
 		FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -153,6 +161,8 @@
 		FAF8D7181D62D1B700C70D90 /* Autobot */ = {
 			isa = PBXGroup;
 			children = (
+				FA6E3E811D6CC7C3000F788A /* Jobs+CoreDataProperties.swift */,
+				FA6E3E821D6CC7C3000F788A /* Jobs.swift */,
 				FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */,
 				FAF8D71B1D62D1B700C70D90 /* ViewController.swift */,
 				FAF6E3671D646C6B00D6C249 /* MainView.swift */,
@@ -164,6 +174,8 @@
 				FAF8D7221D62D1B700C70D90 /* LaunchScreen.storyboard */,
 				FAF8D7251D62D1B700C70D90 /* Info.plist */,
 				FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */,
+				FA01219B1D6C3908008CB44E /* JobsModel.xcdatamodeld */,
+				FA01219E1D6C3A84008CB44E /* DataController.swift */,
 			);
 			path = Autobot;
 			sourceTree = "<group>";
@@ -457,7 +469,11 @@
 				FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */,
 				FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */,
 				FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */,
+				FA6E3E831D6CC7C3000F788A /* Jobs+CoreDataProperties.swift in Sources */,
 				FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */,
+				FA01219F1D6C3A84008CB44E /* DataController.swift in Sources */,
+				FA6E3E841D6CC7C3000F788A /* Jobs.swift in Sources */,
+				FA01219D1D6C3908008CB44E /* JobsModel.xcdatamodeld in Sources */,
 				FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -727,6 +743,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FA01219B1D6C3908008CB44E /* JobsModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FA01219C1D6C3908008CB44E /* JobsModel.xcdatamodel */,
+			);
+			currentVersion = FA01219C1D6C3908008CB44E /* JobsModel.xcdatamodel */;
+			path = JobsModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FAF8D70E1D62D1B700C70D90 /* Project object */;
 }

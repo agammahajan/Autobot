@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import CoreData
 
 
 // for capitalising the name
@@ -29,7 +29,9 @@ class MainView : UITableViewController {
     
     var convertedJsonIntoDict: NSDictionary!
     var items = [AnyObject]()
+    var jobsDB: [Jobs]?
     var item: NSDictionary?
+    var iterator: Jobs? = nil
     var url: NSURL!
     var Token: String?
     
@@ -66,7 +68,7 @@ class MainView : UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (items.count)
+        return jobsDB?.count ?? 0
         
     }
     
@@ -77,30 +79,25 @@ class MainView : UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("LabelCell", forIndexPath: indexPath) as! JobTableViewCell
-      
-        item = items[indexPath.row] as? NSDictionary
-        if item != nil {
-            //cell.idLabel.text = "\(item!["id"]!)"
-            cell.runFailedLabel.text = "\(item!["runFailed"]!)"
-            cell.projectNameLabel.text = "\(item!["id"]!)" + "(\(item!["projectName"]!))"
-            cell.passedLabel.text = "\(item!["passed"]!) passed"
-            cell.failedLabel.text = "\(item!["failed"]!) failed"
+
+        iterator = jobsDB?[indexPath.row]
+        if iterator != nil {
+            cell.runFailedLabel.text = iterator?.run_failed
+            cell.projectNameLabel.text = (iterator?.id)! + "(\((iterator?.project_name)!))"
+            cell.passedLabel.text = (iterator?.passed)! + " passed"
+            cell.failedLabel.text = (iterator?.failed)! + " failed"
             
-            let email = "\(item!["email"]!)"
-            let temp = email.componentsSeparatedByString("@")
+            let email = iterator?.email
+            let temp = email!.componentsSeparatedByString("@")
             let fullNameArr: String = temp[0]
             cell.emailLabel.text = fullNameArr.uppercaseFirst
-            url = NSURL(string: "\(item!["picture"] == nil ? "" : item!["picture"]!)")
-//
-            cell.profilePic.sd_setImageWithURL(url)
+            url = NSURL(string: (iterator?.picture)!)
+            
+            cell.profilePic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "HomeScreen"))
             cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
             cell.profilePic.clipsToBounds = true
-            
-            //hide activity indicator
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            
-            
         }
+      
         messageFrame.hidden = true
         
         return cell
@@ -110,6 +107,8 @@ class MainView : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //fetch()
         
         self.messageFrame.hidden = false
         progressBarDisplayer("Fetching Jobs", true)
@@ -134,6 +133,8 @@ class MainView : UITableViewController {
     }
     
     func Request() {
+    
+
         
         let url:NSURL = NSURL(string: "https://autobot.practodev.com/api/v1/jobs?limit=10")!
         let request = NSMutableURLRequest(URL: url)
@@ -146,22 +147,23 @@ class MainView : UITableViewController {
             if error != nil {
                 print("error=\(error)")
                 
+                self.fetch()
+                
                 return
             }
             // Convert server json response to NSDictionary
             do {
-                  self.convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary
-                    
-                    // Print out dictionary
-                    //print(self.convertedJsonIntoDict)
+                self.convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary
                 
-                    self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
-                    //print(self.items[0]["id"])
-                print("Data Fetched")
+                self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
+                print("Data fetched from api")
                 
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.tableView.reloadData()
-                })
+                self.save_data(self.items)
+                self.fetch()
+               
+                
+                //hide activity indicator
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                
             } catch let error as NSError {
                 print(error.localizedDescription)
@@ -178,8 +180,7 @@ class MainView : UITableViewController {
     }
     
     func update() {
-        //show activity indicator
-        
+        //show activity indicator and auto refresh
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
         if temp == true {
@@ -188,6 +189,63 @@ class MainView : UITableViewController {
             Request()
         }
         
+    }
+    
+    
+    func save_data(items: AnyObject){
+        // create an instance of our managedObjectContext
+        let moc = DataController.sharedInstance.managedObjectContext
+        
+        // we set up our entity by selecting the entity and context that we're targeting
+        
+        // add our data
+        
+        
+            for index in 0...9 {
+                self.item = items[index] as? NSDictionary
+                if self.item != nil {
+                    if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
+                        entity.setValue("\(self.item!["projectName"]!)", forKey: "project_name")
+                        entity.setValue("\(self.item!["id"]!)", forKey: "id")
+                        entity.setValue("\(self.item!["runFailed"]!)", forKey: "run_failed")
+                        entity.setValue("\(self.item!["passed"]!)", forKey: "passed")
+                        entity.setValue("\(self.item!["failed"]!)", forKey: "failed")
+                        entity.setValue("\(self.item!["email"]!)", forKey: "email")
+                        entity.setValue("\(self.item!["picture"]!)", forKey: "picture")
+                    }
+                }
+            
+            do {
+                try moc.save()
+            } catch {
+                fatalError("Failure to save context: \(error)")
+            }
+        }
+        
+        // we save our entity
+        print("Data Saved")
+
+    }
+    
+    
+    func fetch() {
+        let moc = DataController.sharedInstance.managedObjectContext
+        let Fetch = NSFetchRequest(entityName: "Jobs")
+        
+        do {
+            if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
+            
+            
+             jobsDB = fetchedJobs
+             dispatch_async(dispatch_get_main_queue(), {
+
+                    self.tableView.reloadData()
+               })
+            }
+           print("Data fetched from DB")
+        } catch {
+            fatalError("Failed to fetch jobs: \(error)")
+        }
     }
     
 }

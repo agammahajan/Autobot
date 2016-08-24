@@ -80,7 +80,7 @@ class MoreViewController : UIViewController {
                         }
                     )
             
-                    //Setting Defaults
+                    //changing Defaults to stop auto refresh
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.setBool(false, forKey: "Signed")
                     GIDSignIn.sharedInstance().signOut()
