@@ -34,6 +34,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var iterator: Jobs? = nil
     var url: NSURL!
     var Token: String?
+    var iter: AnyObject?
     
     var fetchedResultsController: NSFetchedResultsController?
 
@@ -80,8 +81,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         self.extendedLayoutIncludesOpaqueBars = true
         
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = true
-        searchController.searchBar.placeholder = "Search a Project"
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search a Project with ID"
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
         self.definesPresentationContext = true
@@ -192,6 +193,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             
             if error != nil {
                 print("error=\(error)")
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return
             }
             // Convert server json response to NSDictionary
@@ -202,7 +204,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 print("Data fetched from api")
                 
 //                self.delete()
-                self.save_data(self.items)
+                self.save_data_new(self.items)
 //                self.fetch()
                 
                 //hide activity indicator
@@ -235,40 +237,83 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     }
     
     
-    func save_data(items: AnyObject){
-        // create an instance of our managedObjectContext
+//    func save_data(items: AnyObject){
+//        // create an instance of our managedObjectContext
+//        let moc = DataController.sharedInstance.managedObjectContext
+//        
+//        // we set up our entity by selecting the entity and context that we're targeting
+//        
+//        // add our data
+//        
+//        
+//            for index in 0...9 {
+//                self.item = items[index] as? NSDictionary
+//                if self.item != nil {
+//                    if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
+//                        entity.setValue("\(self.item!["projectName"]!)", forKey: "project_name")
+//                        entity.setValue("\(self.item!["id"]!)", forKey: "id")
+//                        entity.setValue("\(self.item!["runFailed"]!)", forKey: "run_failed")
+//                        entity.setValue("\(self.item!["passed"]!)", forKey: "passed")
+//                        entity.setValue("\(self.item!["failed"]!)", forKey: "failed")
+//                        entity.setValue("\(self.item!["email"]!)", forKey: "email")
+//                        entity.setValue("\(self.item!["picture"]!)", forKey: "picture")
+//                    }
+//                }
+//            
+//            do {
+//                try moc.save()
+//            } catch {
+//                fatalError("Failure to save context: \(error)")
+//            }
+//        }
+//        
+//        // we save our entity
+//        print("Data Saved")
+//
+//    }
+    
+    func save_data_new(items: [AnyObject]){
         let moc = DataController.sharedInstance.managedObjectContext
-        
-        // we set up our entity by selecting the entity and context that we're targeting
-        
-        // add our data
-        
-        
-            for index in 0...9 {
-                self.item = items[index] as? NSDictionary
-                if self.item != nil {
-                    if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
-                        entity.setValue("\(self.item!["projectName"]!)", forKey: "project_name")
-                        entity.setValue("\(self.item!["id"]!)", forKey: "id")
-                        entity.setValue("\(self.item!["runFailed"]!)", forKey: "run_failed")
-                        entity.setValue("\(self.item!["passed"]!)", forKey: "passed")
-                        entity.setValue("\(self.item!["failed"]!)", forKey: "failed")
-                        entity.setValue("\(self.item!["email"]!)", forKey: "email")
-                        entity.setValue("\(self.item!["picture"]!)", forKey: "picture")
+        for index in 0...9 {
+            iter = items[index]
+            if iter != nil {
+                let temp = iter!["id"]
+                let Fetch = NSFetchRequest(entityName: "Jobs")
+                Fetch.predicate = NSPredicate(format: "id = %@", temp!!.description)
+                do {
+                    if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
+                    let managedObject = fetchedJobs[0]
+                    managedObject.setValue("\(iter!["runFailed"]!!)", forKey: "run_failed")
+                    managedObject.setValue("\(iter!["passed"]!!)", forKey: "passed")
+                    managedObject.setValue("\(iter!["failed"]!!)", forKey: "failed")
                     }
+                    else {
+                        if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
+                            entity.setValue("\(iter!["projectName"]!!)", forKey: "project_name")
+                            entity.setValue("\(iter!["id"]!!)", forKey: "id")
+                            entity.setValue("\(iter!["runFailed"]!!)", forKey: "run_failed")
+                            entity.setValue("\(iter!["passed"]!!)", forKey: "passed")
+                            entity.setValue("\(iter!["failed"]!!)", forKey: "failed")
+                            entity.setValue("\(iter!["email"]!!)", forKey: "email")
+                            entity.setValue("\(iter!["picture"]!!)", forKey: "picture")
+                        }
+                    }
+                    
                 }
-            
+                catch {
+                    fatalError("Failure to save context: \(error)")
+                }
+            }
             do {
                 try moc.save()
-            } catch {
+            }
+            catch {
                 fatalError("Failure to save context: \(error)")
             }
         }
-        
-        // we save our entity
-        print("Data Saved")
-
     }
+
+
     
     
 //    func fetch() {
@@ -291,25 +336,26 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
 //        }
 //    }
     
-    func delete(){
-        let moc = DataController.sharedInstance.managedObjectContext
-        let ReqVar = NSFetchRequest(entityName: "Jobs")
-        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: ReqVar)
-        do {
-            try moc.executeRequest(DelAllReqVar)
-            print("Data deleted from DB")
-        }
-        catch {
-            fatalError("Failed to delete jobs: \(error)")
-        }
-    }
+//    func delete(){
+//        let moc = DataController.sharedInstance.managedObjectContext
+//        let ReqVar = NSFetchRequest(entityName: "Jobs")
+//        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: ReqVar)
+//        do {
+//            try moc.executeRequest(DelAllReqVar)
+//            print("Data deleted from DB")
+//        }
+//        catch {
+//            fatalError("Failed to delete jobs: \(error)")
+//        }
+//    }
     
     func fetch_new() {
         let moc = DataController.sharedInstance.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Jobs")
         let fetchSort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [fetchSort]
-        fetchRequest.fetchBatchSize = 10
+//        
+       fetchRequest.fetchBatchSize = 10
         //2
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
@@ -361,5 +407,4 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
 
         }
     }
-
 }
