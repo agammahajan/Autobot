@@ -15,6 +15,7 @@
 		FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */; };
 		FA6E3E831D6CC7C3000F788A /* Jobs+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6E3E811D6CC7C3000F788A /* Jobs+CoreDataProperties.swift */; };
 		FA6E3E841D6CC7C3000F788A /* Jobs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6E3E821D6CC7C3000F788A /* Jobs.swift */; };
+		FA8926211D6F31D300BFBB6E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8926201D6F31D300BFBB6E /* Reachability.swift */; };
 		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
 		FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */; };
 		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
@@ -62,6 +63,7 @@
 		FA4CA5351D6706BC006FFB36 /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		FA6E3E811D6CC7C3000F788A /* Jobs+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Jobs+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FA6E3E821D6CC7C3000F788A /* Jobs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Jobs.swift; sourceTree = "<group>"; };
+		FA8926201D6F31D300BFBB6E /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
 		FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */,
 				FA01219B1D6C3908008CB44E /* JobsModel.xcdatamodeld */,
 				FA01219E1D6C3A84008CB44E /* DataController.swift */,
+				FA8926201D6F31D300BFBB6E /* Reachability.swift */,
 			);
 			path = Autobot;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				FA6E3E831D6CC7C3000F788A /* Jobs+CoreDataProperties.swift in Sources */,
 				FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */,
 				FA01219F1D6C3A84008CB44E /* DataController.swift in Sources */,
+				FA8926211D6F31D300BFBB6E /* Reachability.swift in Sources */,
 				FA6E3E841D6CC7C3000F788A /* Jobs.swift in Sources */,
 				FA01219D1D6C3908008CB44E /* JobsModel.xcdatamodeld in Sources */,
 				FA4CA5361D6706BC006FFB36 /* SplashViewController.swift in Sources */,

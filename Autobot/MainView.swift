@@ -217,6 +217,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         
         //fetch()
         self.fetch_new()
+        
         self.messageFrame.hidden = false
         progressBarDisplayer("Fetching Jobs", true)
         
@@ -225,6 +226,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         
         //Auto Refresh
         _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        
         
         //Getting defaults
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -243,9 +245,17 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         let task = session.dataTaskWithRequest(request) {
             data, response,  error in
             
+            //When there is no internet
             if error != nil {
                 print("error=\(error)")
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                self.messageFrame.hidden = true
+                dispatch_async(dispatch_get_main_queue(), {
+                    let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                )
                 return
             }
             // Convert server json response to NSDictionary
@@ -281,9 +291,15 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
         if temp == true {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            print("AutoRefresh!")
-            Request()
+            if Reachability.isConnectedToNetwork() == true {
+                print("Internet connection OK")
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                print("AutoRefresh!")
+                Request()
+            } else {
+                print("Internet connection FAILED")
+            }
+            
         }
         
     }
