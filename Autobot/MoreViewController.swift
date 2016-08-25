@@ -47,7 +47,7 @@ class MoreViewController : UIViewController {
         UserPic = defaults.stringForKey("PicKey")
         print(UserPic!)
         let url:NSURL = NSURL(string: UserPic!)!
-        pic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "HomeScreen"))
+        pic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "Placeholder"))
         pic.layer.cornerRadius = pic.frame.size.width / 2;
         pic.clipsToBounds = true
         
@@ -59,7 +59,7 @@ class MoreViewController : UIViewController {
     @IBAction func didTapSignOut(sender: AnyObject) {
         
         //Create the AlertController and add Its action like button in Actionsheet
-        let actionSheetControllerIOS8: UIAlertController = UIAlertController(title: "Are you sure", message: "Select One", preferredStyle: .ActionSheet)
+        let actionSheetControllerIOS8: UIAlertController = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: .ActionSheet)
         
         let cancelActionButton: UIAlertAction = UIAlertAction(title: "NO", style: .Cancel) { action -> Void in
             print("Cancel")
@@ -70,20 +70,21 @@ class MoreViewController : UIViewController {
         { action -> Void in
             print("Yes")
             
-                        dispatch_async(dispatch_get_main_queue(),{
-                        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            dispatch_async(dispatch_get_main_queue(),{
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
             
-                        let temp = storyBoard.instantiateViewControllerWithIdentifier("ViewController") as UIViewController
-                        self.presentViewController(temp, animated:true, completion:nil)
+            let temp = storyBoard.instantiateViewControllerWithIdentifier("ViewController") as UIViewController
+            self.presentViewController(temp, animated:true, completion:nil)
             
+              }
+           )
             
-                        }
-                    )
+            MainView.deleteDB()
             
-                    //changing Defaults to stop auto refresh
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    defaults.setBool(false, forKey: "Signed")
-                    GIDSignIn.sharedInstance().signOut()
+            //changing Defaults to stop auto refresh
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setBool(false, forKey: "Signed")
+            GIDSignIn.sharedInstance().signOut()
         }
         actionSheetControllerIOS8.addAction(saveActionButton)
    

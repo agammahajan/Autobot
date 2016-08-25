@@ -11,6 +11,7 @@ import UIKit
 import CoreData
 
 
+ // MARK: Extension
 // for capitalising the name
 extension String {
     var first: String {
@@ -23,14 +24,28 @@ extension String {
         return first.uppercaseString + String(characters.dropFirst())
     }
 }
+ 
+ extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(netHex:Int) {
+        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+    }
+ }
 
-
+//MARK: MainView
 class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UISearchResultsUpdating , UISearchBarDelegate {
     
     var convertedJsonIntoDict: NSDictionary!
     var items = [AnyObject]()
-    var jobsDB: [Jobs] = []
-    var item: NSDictionary?
+//    var jobsDB: [Jobs] = []
+//    var item: NSDictionary?
     var iterator: Jobs? = nil
     var url: NSURL!
     var Token: String?
@@ -48,6 +63,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var strLabel = UILabel()
     
     
+    
+    // MARK: SearchBAR
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         showSearchResuts = true
         tableView.reloadData()
@@ -81,7 +98,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         self.extendedLayoutIncludesOpaqueBars = true
         
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.placeholder = "Search a Project with ID"
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
@@ -92,7 +109,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
 //        searchController.hidesNavigationBarDuringPresentation = false
     }
     
-    
+    // MARK: Activity Indicator
     func progressBarDisplayer(msg:String, _ indicator:Bool ) {
         print(msg)
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
@@ -112,6 +129,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     }
 
  
+    // MARK: Populate Table
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -136,29 +154,62 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
 
         iterator = (showSearchResuts ? filteredJobs[indexPath.row] : fetchedResultsController!.objectAtIndexPath(indexPath) )as? Jobs
         if iterator != nil {
-            cell.runFailedLabel.text = iterator?.run_failed
             cell.projectNameLabel.text = (iterator?.id)! + "(\((iterator?.project_name)!))"
             cell.passedLabel.text = (iterator?.passed)! + " passed"
             cell.failedLabel.text = (iterator?.failed)! + " failed"
+            
+            let status:Int = Int((iterator?.run_failed)!)!
+            let failedNumber:Int = Int((iterator?.failed)!)!
+            
+            switch status {
+            case 0 : cell.runFailedLabel.text = "Added"
+            cell.runFailedLabel.textColor = UIColor(netHex:0x777777)
+                break
+            case 1 : cell.runFailedLabel.text = "Running"
+            cell.runFailedLabel.textColor = UIColor(netHex:0x5BC0DE)
+                break
+            case 2 : cell.runFailedLabel.text = "Aborted"
+            cell.runFailedLabel.textColor = UIColor(netHex:0xD9534F)
+                break
+            case 3 : cell.runFailedLabel.text = "Killed"
+            cell.runFailedLabel.textColor = UIColor(netHex:0xD9534F)
+                break
+            case 4 : if failedNumber == 0 {
+                cell.runFailedLabel.text = "Success"
+                cell.runFailedLabel.textColor = UIColor(netHex:0x5CB85C)
+            }
+            else{
+                cell.runFailedLabel.text = "Failed"
+                cell.runFailedLabel.textColor = UIColor(netHex:0xD9534F)
+            }
+                break
+            case 5 : cell.runFailedLabel.text = "Killing"
+            cell.runFailedLabel.textColor = UIColor(netHex:0xF0AD4E)
+                break
+            case 6 : cell.runFailedLabel.text = "Queued"
+            cell.runFailedLabel.textColor = UIColor(netHex:0x5BC0DE)
+                break
+            default : cell.runFailedLabel.text = "Failed"
+            cell.runFailedLabel.textColor = UIColor(netHex:0xD9534F)
+            }
             
             let email = iterator?.email
             let temp = email!.componentsSeparatedByString("@")
             let fullNameArr: String = temp[0]
             cell.emailLabel.text = fullNameArr.uppercaseFirst
             url = NSURL(string: (iterator?.picture)!)
-            
-            cell.profilePic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "HomeScreen"))
+            cell.profilePic.sd_setImageWithURL(url, placeholderImage: UIImage(named: "Placeholder"))
             cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2;
             cell.profilePic.clipsToBounds = true
         }
       
         messageFrame.hidden = true
-        
         return cell
     }
    
    
     
+    // MARK: ViewLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -172,13 +223,14 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         //Pull to refresh
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
-//        //Auto Refresh
-//        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        //Auto Refresh
+        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
         //Getting defaults
         let defaults = NSUserDefaults.standardUserDefaults()
         Token = defaults.stringForKey("TokenKey")
             print(Token!)
+        
         Request()
     }
     
@@ -203,10 +255,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
                 print("Data fetched from api")
                 
-//                self.delete()
                 self.save_data_new(self.items)
-//                self.fetch()
-                
+
                 //hide activity indicator
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                
@@ -217,6 +267,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         task.resume()
     }
     
+    // MARK: Pull to Refresh
     func refresh(sender:AnyObject){
         //pull to Refresh
         print("Refresh")
@@ -224,6 +275,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         self.refreshControl?.endRefreshing()
     }
     
+    // MARK: AutoRefresh
     func update() {
         //show activity indicator and auto refresh
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -237,41 +289,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     }
     
     
-//    func save_data(items: AnyObject){
-//        // create an instance of our managedObjectContext
-//        let moc = DataController.sharedInstance.managedObjectContext
-//        
-//        // we set up our entity by selecting the entity and context that we're targeting
-//        
-//        // add our data
-//        
-//        
-//            for index in 0...9 {
-//                self.item = items[index] as? NSDictionary
-//                if self.item != nil {
-//                    if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
-//                        entity.setValue("\(self.item!["projectName"]!)", forKey: "project_name")
-//                        entity.setValue("\(self.item!["id"]!)", forKey: "id")
-//                        entity.setValue("\(self.item!["runFailed"]!)", forKey: "run_failed")
-//                        entity.setValue("\(self.item!["passed"]!)", forKey: "passed")
-//                        entity.setValue("\(self.item!["failed"]!)", forKey: "failed")
-//                        entity.setValue("\(self.item!["email"]!)", forKey: "email")
-//                        entity.setValue("\(self.item!["picture"]!)", forKey: "picture")
-//                    }
-//                }
-//            
-//            do {
-//                try moc.save()
-//            } catch {
-//                fatalError("Failure to save context: \(error)")
-//            }
-//        }
-//        
-//        // we save our entity
-//        print("Data Saved")
-//
-//    }
-    
+    // MARK: Saving Data
     func save_data_new(items: [AnyObject]){
         let moc = DataController.sharedInstance.managedObjectContext
         for index in 0...9 {
@@ -283,7 +301,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 do {
                     if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
                     let managedObject = fetchedJobs[0]
-                    managedObject.setValue("\(iter!["runFailed"]!!)", forKey: "run_failed")
+                    managedObject.setValue("\(iter!["status"]!!)", forKey: "run_failed")
                     managedObject.setValue("\(iter!["passed"]!!)", forKey: "passed")
                     managedObject.setValue("\(iter!["failed"]!!)", forKey: "failed")
                     }
@@ -291,7 +309,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                         if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
                             entity.setValue("\(iter!["projectName"]!!)", forKey: "project_name")
                             entity.setValue("\(iter!["id"]!!)", forKey: "id")
-                            entity.setValue("\(iter!["runFailed"]!!)", forKey: "run_failed")
+                            entity.setValue("\(iter!["status"]!!)", forKey: "run_failed")
                             entity.setValue("\(iter!["passed"]!!)", forKey: "passed")
                             entity.setValue("\(iter!["failed"]!!)", forKey: "failed")
                             entity.setValue("\(iter!["email"]!!)", forKey: "email")
@@ -312,56 +330,17 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             }
         }
     }
-
-
     
-    
-//    func fetch() {
-//        let moc = DataController.sharedInstance.managedObjectContext
-//        let Fetch = NSFetchRequest(entityName: "Jobs")
-//        
-//        do {
-//            if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
-//            
-//            
-//            // jobsDB = fetchedJobs
-//             dispatch_async(dispatch_get_main_queue(), {
-//
-//                    self.tableView.reloadData()
-//               })
-//            }
-//           print("Data fetched from DB")
-//        } catch {
-//            fatalError("Failed to fetch jobs: \(error)")
-//        }
-//    }
-    
-//    func delete(){
-//        let moc = DataController.sharedInstance.managedObjectContext
-//        let ReqVar = NSFetchRequest(entityName: "Jobs")
-//        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: ReqVar)
-//        do {
-//            try moc.executeRequest(DelAllReqVar)
-//            print("Data deleted from DB")
-//        }
-//        catch {
-//            fatalError("Failed to delete jobs: \(error)")
-//        }
-//    }
+    //MARK: FetchResultController
     
     func fetch_new() {
         let moc = DataController.sharedInstance.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Jobs")
         let fetchSort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [fetchSort]
-//        
-       fetchRequest.fetchBatchSize = 10
-        //2
-        
+        fetchRequest.fetchBatchSize = 10
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController?.delegate = self
-        
-        //3
         do {
             try fetchedResultsController!.performFetch()
             
@@ -406,5 +385,15 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
 
         }
+    }
+    
+    // MARK: Delete DB
+        static func deleteDB() {
+        let moc = DataController.sharedInstance.managedObjectContext
+        let Fetch = NSFetchRequest(entityName: "Jobs")
+        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: Fetch)
+        do {
+            try moc.executeRequest(DelAllReqVar) }
+        catch { print(error) }
     }
 }
