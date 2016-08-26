@@ -50,6 +50,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var url: NSURL!
     var Token: String?
     var iter: AnyObject?
+    var limit: Int!
     
     var fetchedResultsController: NSFetchedResultsController?
 
@@ -62,16 +63,19 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
     
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     
     // MARK: SearchBAR
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         showSearchResuts = true
+        self.fetchedResultsController?.delegate = nil
         tableView.reloadData()
     }
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         showSearchResuts = false
         tableView.reloadData()
+        self.fetchedResultsController?.delegate = self
     }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         if !showSearchResuts {
@@ -79,27 +83,41 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             tableView.reloadData()
         }
         searchController.searchBar.resignFirstResponder()
+        self.fetchedResultsController?.delegate = self
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchString = searchController.searchBar.text
         
-        filteredJobs = (fetchedResultsController?.fetchedObjects as! [Jobs]).filter({ (job) -> Bool in
-            if searchString == "" {
-                return true
+//        filteredJobs = (fetchedResultsController?.fetchedObjects as! [Jobs]).filter({ (job) -> Bool in
+//            if searchString == "" {
+//                return true
+//            }
+//            return (job.id?.rangeOfString(searchString! , options: NSStringCompareOptions.CaseInsensitiveSearch)) != nil
+//        })
+        let moc = DataController.sharedInstance.managedObjectContext
+        let Fetchrequest = NSFetchRequest(entityName: "Jobs")
+         Fetchrequest.predicate = NSPredicate(format: "id CONTAINS[c] %@ OR email CONTAINS[c] %@ OR project_name CONTAINS[c] %@", searchString!, searchString!,searchString!)
+        do {
+            if let fetchedJobs = try moc.executeFetchRequest(Fetchrequest) as? [Jobs] {
+                filteredJobs = fetchedJobs
             }
-            return (job.id?.rangeOfString(searchString! , options: NSStringCompareOptions.CaseInsensitiveSearch)) != nil
-        })
+            
+        }
+        catch {
+            fatalError("Failure to fetch context: \(error)")
+        }
+
+        
         tableView.reloadData()
     }
     func configureSearchController(){
         
         searchController = UISearchController(searchResultsController: nil)
         self.extendedLayoutIncludesOpaqueBars = true
-        
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = true
-        searchController.searchBar.placeholder = "Search a Project with ID"
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search a Project"
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
         self.definesPresentationContext = true
@@ -115,7 +133,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
         strLabel.text = msg
         strLabel.textColor = UIColor.whiteColor()
-        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90, y: view.frame.midY - 10 , width: 180, height: 50))
+        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90 , y: view.frame.midY - 70   , width: 180, height: 50))
         messageFrame.layer.cornerRadius = 15
         messageFrame.backgroundColor = UIColor(white: 0, alpha: 0.5)
         if indicator {
@@ -139,6 +157,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             return filteredJobs.count
         }
         if fetchedResultsController != nil {
+            
             return (fetchedResultsController!.sections?[section].numberOfObjects)!
         }
             return 0
@@ -206,7 +225,15 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         messageFrame.hidden = true
         return cell
     }
-   
+    
+    
+   // MARK: View disappears
+    override func viewWillDisappear(animated: Bool) {
+//        //changing Defaults to stop auto refresh
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        defaults.setBool(false, forKey: "Signed")
+        
+    }
    
     
     // MARK: ViewLoad
@@ -214,6 +241,9 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         super.viewDidLoad()
         
         configureSearchController()
+        
+        defaults.setBool(true, forKey: "Signed")
+        Token = defaults.stringForKey("TokenKey")
         
         //fetch()
         self.fetch_new()
@@ -225,19 +255,27 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         //Auto Refresh
-        _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        _ = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
         
-        //Getting defaults
-        let defaults = NSUserDefaults.standardUserDefaults()
-        Token = defaults.stringForKey("TokenKey")
-            print(Token!)
+    
+        
         
         Request()
     }
     
     func Request() {
-        let url:NSURL = NSURL(string: "https://autobot.practodev.com/api/v1/jobs?limit=10")!
+        
+        let count = calCount()
+        if count == 0 {
+            limit = 100
+        }
+        else{
+            limit = count
+        }
+        print(limit)
+        let api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)"
+        let url:NSURL = NSURL(string: api)!
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
         request.addValue(Token!, forHTTPHeaderField: "apiToken")
@@ -247,15 +285,17 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             
             //When there is no internet
             if error != nil {
-                print("error=\(error)")
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                self.messageFrame.hidden = true
-                dispatch_async(dispatch_get_main_queue(), {
-                    let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                    }
-                )
+                print(error?.code)
+                if error?.code == -1009{
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    self.messageFrame.hidden = true
+                    dispatch_async(dispatch_get_main_queue(), {
+                        let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        }
+                    )
+                }
                 return
             }
             // Convert server json response to NSDictionary
@@ -264,6 +304,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 
                 self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
                 print("Data fetched from api")
+                
                 
                 self.save_data_new(self.items)
 
@@ -280,8 +321,10 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     // MARK: Pull to Refresh
     func refresh(sender:AnyObject){
         //pull to Refresh
-        print("Refresh")
-        Request()
+        if showSearchResuts == false {
+            Request()
+            print("Refresh")
+        }
         self.refreshControl?.endRefreshing()
     }
     
@@ -291,24 +334,44 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
         if temp == true {
-            if Reachability.isConnectedToNetwork() == true {
-                print("Internet connection OK")
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                print("AutoRefresh!")
-                Request()
-            } else {
-                print("Internet connection FAILED")
+            if showSearchResuts == false {
+                if Reachability.isConnectedToNetwork() == true {
+                    print("Internet connection OK")
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                    print("AutoRefresh!")
+                    Request()
+                } else {
+                    print("Internet connection FAILED")
+                }
             }
             
         }
         
     }
     
+    // Calculate count in db
+     func calCount() -> Int {
+        let moc = DataController.sharedInstance.managedObjectContext
+        let Fetch = NSFetchRequest(entityName: "Jobs")
+        do {
+            if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] {
+                return fetchedJobs.count
+            }
+            
+        }
+        catch {
+            fatalError("Failure to fetch context: \(error)")
+        }
+        return 0
+    }
+    
+    
     
     // MARK: Saving Data
     func save_data_new(items: [AnyObject]){
         let moc = DataController.sharedInstance.managedObjectContext
-        for index in 0...9 {
+        
+        for index in 0..<limit {
             iter = items[index]
             if iter != nil {
                 let temp = iter!["id"]
@@ -317,19 +380,19 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 do {
                     if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
                     let managedObject = fetchedJobs[0]
-                    managedObject.setValue("\(iter!["status"]!!)", forKey: "run_failed")
-                    managedObject.setValue("\(iter!["passed"]!!)", forKey: "passed")
-                    managedObject.setValue("\(iter!["failed"]!!)", forKey: "failed")
+                    managedObject.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                    managedObject.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                    managedObject.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
                     }
                     else {
                         if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
-                            entity.setValue("\(iter!["projectName"]!!)", forKey: "project_name")
-                            entity.setValue("\(iter!["id"]!!)", forKey: "id")
-                            entity.setValue("\(iter!["status"]!!)", forKey: "run_failed")
-                            entity.setValue("\(iter!["passed"]!!)", forKey: "passed")
-                            entity.setValue("\(iter!["failed"]!!)", forKey: "failed")
-                            entity.setValue("\(iter!["email"]!!)", forKey: "email")
-                            entity.setValue("\(iter!["picture"]!!)", forKey: "picture")
+                            entity.setValue("\(iter!["projectName"]!!)" ?? "", forKey: "project_name")
+                            entity.setValue("\(iter!["id"]!!)" ?? "", forKey: "id")
+                            entity.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                            entity.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                            entity.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
+                            entity.setValue("\(iter!["email"]!!)" ?? "", forKey: "email")
+                            entity.setValue("\(iter!["picture"]!!)" ?? "", forKey: "picture")
                         }
                     }
                     
@@ -345,6 +408,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 fatalError("Failure to save context: \(error)")
             }
         }
+        print("Data saved")
     }
     
     //MARK: FetchResultController
@@ -355,6 +419,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         let fetchSort = NSSortDescriptor(key: "id", ascending: false)
         fetchRequest.sortDescriptors = [fetchSort]
         fetchRequest.fetchBatchSize = 10
+//        fetchRequest.fetchLimit = 10
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController?.delegate = self
         do {
