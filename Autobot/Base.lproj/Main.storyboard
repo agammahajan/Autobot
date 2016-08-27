@@ -231,7 +231,7 @@
                         <viewControllerLayoutGuide type="bottom" id="PEy-78-0Al"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nZi-av-Kgn">
-                        <rect key="frame" x="0.0" y="64" width="414" height="623"/>
+                        <rect key="frame" x="0.0" y="64" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time taken" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N6K-5s-g0y">
@@ -427,6 +427,13 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZa-7w-YO9">
+                                <rect key="frame" x="16" y="326" width="54" height="30"/>
+                                <state key="normal" title="Reports"/>
+                                <connections>
+                                    <action selector="clickReports:" destination="YYT-gB-jnr" eventType="touchUpInside" id="zc7-im-sxS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -471,6 +478,8 @@
                             <constraint firstItem="gNF-Sj-PcP" firstAttribute="centerX" secondItem="nZi-av-Kgn" secondAttribute="centerX" id="ya8-tu-0qW"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
                     <connections>
                         <outlet property="createdatLabel" destination="z0S-Uc-J69" id="T0W-1H-8mJ"/>
@@ -480,6 +489,7 @@
                         <outlet property="passedLabel" destination="gNF-Sj-PcP" id="gje-ob-ZNR"/>
                         <outlet property="pic" destination="2cB-71-f3V" id="tmZ-QK-Isc"/>
                         <outlet property="projectLabel" destination="oyw-k9-ftJ" id="nIl-wy-a4E"/>
+                        <outlet property="reports" destination="EZa-7w-YO9" id="ZMh-XJ-u5Q"/>
                         <outlet property="statusLabel" destination="gPJ-vC-b7S" id="CaE-fB-1lh"/>
                         <outlet property="testLabel" destination="7AD-f6-MYc" id="Ere-SF-xZ3"/>
                         <outlet property="testsuiteLabel" destination="v4e-Y1-bQ8" id="iIt-Jm-KSF"/>

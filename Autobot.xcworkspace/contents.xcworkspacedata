@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Autobot/Jobs+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:Autobot/Jobs.swift">
-   </FileRef>
-   <FileRef
       location = "group:Autobot.xcodeproj">
    </FileRef>
    <FileRef

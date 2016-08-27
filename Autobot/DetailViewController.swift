@@ -21,6 +21,7 @@ var testDetail: String?
 var createdbyDetail: String?
 var createdatDetail: String?
 var picDetail: String?
+var uuidDetail: String?
 
 class DetailViewController : UIViewController {
     
@@ -38,7 +39,12 @@ class DetailViewController : UIViewController {
     @IBOutlet weak var pic: UIImageView!
     @IBOutlet weak var createdbyLabel: UILabel!
     @IBOutlet weak var createdatLabel: UILabel!
+    @IBOutlet weak var reports: UIButton!
     
+    @IBAction func clickReports(sender: AnyObject) {
+        let url = "https://dev-tab-steller.s3-ap-southeast-1.amazonaws.com/" + uuidDetail! + "/report.html"
+        UIApplication.sharedApplication().openURL(NSURL(string: url)!)
+    }
     
     
     override func viewDidLoad() {
@@ -53,8 +59,13 @@ class DetailViewController : UIViewController {
         
         if timetakenDetail == "" {
            timetakenLabel.text = "nil"
+           reports.hidden = true
         }
-        timetakenLabel.text = timetakenDetail
+        else{
+           timetakenLabel.text = timetakenDetail
+            reports.hidden = false
+        }
+        
         testLabel.text = testDetail
         createdatLabel.text = createdatDetail
         //createdbyLabel.text = createdbyDetail

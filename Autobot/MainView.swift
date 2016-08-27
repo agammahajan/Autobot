@@ -272,6 +272,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             failedDetail = item?.failed
             testDetail = item?.test_label
             testsuiteDetail = item?.test_suite
+            uuidDetail = item?.uuid
         }
     }
     
@@ -440,6 +441,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                             managedObject.setValue("\(self.iter!["passed"]!!)" ?? "", forKey: "passed")
                             managedObject.setValue("\(self.iter!["failed"]!!)" ?? "", forKey: "failed")
                             managedObject.setValue("\(self.iter!["duration"]!!)" ?? "", forKey: "time_taken")
+                            managedObject.setValue("\(self.iter!["uuid"]!!)" ?? "", forKey: "uuid")
+                            
                         }
                         else {
                             if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
@@ -454,6 +457,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                                 entity.time_taken = "\(self.iter!["duration"]!!)" ?? ""
                                 entity.test_label = "\(self.iter!["label"]!!)" ?? ""
                                 entity.test_suite = "\(self.iter!["testsuitName"]!!)" ?? ""
+                                entity.uuid = "\(self.iter!["uuid"]!!)" ?? ""
                             }
                         }
                         

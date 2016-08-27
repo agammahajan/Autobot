@@ -12,8 +12,9 @@
         <attribute name="test_label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="test_suite" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="time_taken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Jobs" positionX="-54" positionY="-9" width="128" height="210"/>
+        <element name="Jobs" positionX="-54" positionY="-9" width="128" height="225"/>
     </elements>
 </model>
