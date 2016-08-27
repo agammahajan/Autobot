@@ -63,10 +63,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
     
-    //for loading indicator
-    var messageFrame1 = UIView()
-    var activityIndicator1 = UIActivityIndicatorView()
-    var strLabel1 = UILabel()
+    let pagingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     
     let defaults = NSUserDefaults.standardUserDefaults()
     var flag: Bool = true
@@ -84,9 +81,9 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         self.fetch_new()
         
         self.messageFrame.hidden = false
-        messageFrame1.hidden = true
         progressBarDisplayer("Fetching Jobs", true)
         self.view.userInteractionEnabled = false
+        pagingSpinner.hidden = true
         
         //Pull to refresh
                 self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
@@ -102,16 +99,20 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     
     // MARK: SearchBAR
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        pagingSpinner.hidden = true
         showSearchResuts = true
         self.fetchedResultsController?.delegate = nil
         tableView.reloadData()
     }
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        
         showSearchResuts = false
         tableView.reloadData()
         self.fetchedResultsController?.delegate = self
+        pagingSpinner.hidden = true
     }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        pagingSpinner.hidden = true
         if !showSearchResuts {
             showSearchResuts = true
             tableView.reloadData()
@@ -277,11 +278,12 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 }
                 else if (scrollOffset + scrollViewHeight >= scrollContentSizeHeight)
                 {
-                    flag = true
-//                    show_indicator(scrollView)
-//                    messageFrame1.hidden = false
                     // then we are at the end
+                    pagingSpinner.hidden = false
+                    flag = true     // no more ends are called
                     self.view.userInteractionEnabled = false
+                    show_indicator()
+//
                     print("end")
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
                     Request_modified()
@@ -289,6 +291,13 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             }
             
         }
+    }
+    
+    func show_indicator(){
+        pagingSpinner.startAnimating()
+        pagingSpinner.color = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
+        pagingSpinner.hidesWhenStopped = true
+        self.tableView.tableFooterView = pagingSpinner
     }
     
 //    func show_indicator(scrollView: UIScrollView){
@@ -329,12 +338,13 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                     self.messageFrame.hidden = true
                     self.view.userInteractionEnabled = true
                     self.flag = false
-                    dispatch_async(dispatch_get_main_queue(), {
-                        let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
-                        }
-                    )
+                    self.pagingSpinner.hidden = true
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
+//                        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+//                        self.presentViewController(alert, animated: true, completion: nil)
+//                        }
+//                    )
                 }
                 return
             }
@@ -352,7 +362,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 
                 self.flag = false
-                self.messageFrame1.hidden = true
+                self.pagingSpinner.hidden = true
                 self.view.userInteractionEnabled = true
                 
             } catch let error as NSError {
