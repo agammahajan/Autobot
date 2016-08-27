@@ -49,7 +49,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var iterator: Jobs? = nil
     var url: NSURL!
     var Token: String?
-    var iter: AnyObject?
+    //var iter: AnyObject?
     var limit: Int!
     
     var fetchedResultsController: NSFetchedResultsController?
@@ -63,7 +63,41 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
     
+    //for loading indicator
+    var messageFrame1 = UIView()
+    var activityIndicator1 = UIActivityIndicatorView()
+    var strLabel1 = UILabel()
+    
     let defaults = NSUserDefaults.standardUserDefaults()
+    var flag: Bool = true
+    
+    // MARK: ViewLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configureSearchController()
+        
+        defaults.setBool(true, forKey: "Signed")
+        Token = defaults.stringForKey("TokenKey")
+        flag = false
+        //fetch()
+        self.fetch_new()
+        
+        self.messageFrame.hidden = false
+        messageFrame1.hidden = true
+        progressBarDisplayer("Fetching Jobs", true)
+        self.view.userInteractionEnabled = false
+        
+        //Pull to refresh
+                self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        
+        //Auto Refresh
+                _ = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+        
+        Request(0)
+    }
+    
+    
     
     
     // MARK: SearchBAR
@@ -133,7 +167,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
         strLabel.text = msg
         strLabel.textColor = UIColor.whiteColor()
-        messageFrame = UIView(frame: CGRect(x: view.frame.midX - 90 , y: view.frame.midY - 70   , width: 180, height: 50))
+        messageFrame = UIView(frame: CGRect(x: self.view.frame.midX - 90 , y: self.view.frame.midY - 70   , width: 180, height: 50))
         messageFrame.layer.cornerRadius = 15
         messageFrame.backgroundColor = UIColor(white: 0, alpha: 0.5)
         if indicator {
@@ -229,31 +263,161 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         return cell
     }
     
-//    override func scrollViewDidScroll(scrollView: UIScrollView) {
-//        let currentOffset = scrollView.contentOffset.y
-//        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-//        if ((currentOffset > 0) && (maximumOffset - currentOffset) <= 10) {
-//            print("end")
-//          
-//            if Reachability.isConnectedToNetwork() == true {
-//                print("Internet connection OK")
-//                self.view.userInteractionEnabled = false
-//                //messageFrame.hidden = false
-//                Request(20)
-//                self.view.userInteractionEnabled = true
-//                //messageFrame.hidden = true
-//                }
-//            else {
-//                print("Internet connection FAILED")
-//                dispatch_async(dispatch_get_main_queue(), {
-//                let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Old Jobs", preferredStyle: UIAlertControllerStyle.Alert)
-//                alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
-//                self.presentViewController(alert, animated: true, completion: nil)
-//                        }
-//                    )
-//                }
-//        }
+    //MARK: Reach end of DB
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        if showSearchResuts == false {
+            if flag == false {
+                let scrollViewHeight = scrollView.frame.size.height;
+                let scrollContentSizeHeight = scrollView.contentSize.height;
+                let scrollOffset = scrollView.contentOffset.y;
+                
+                if (scrollOffset == 0)
+                {
+                    // then we are at the top
+                }
+                else if (scrollOffset + scrollViewHeight >= scrollContentSizeHeight)
+                {
+                    flag = true
+//                    show_indicator(scrollView)
+//                    messageFrame1.hidden = false
+                    // then we are at the end
+                    self.view.userInteractionEnabled = false
+                    print("end")
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                    Request_modified()
+                }
+            }
+            
+        }
+    }
+    
+//    func show_indicator(scrollView: UIScrollView){
+//        strLabel1 = UILabel(frame: CGRect(x: 50, y: 0, width: 200, height: 50))
+//        strLabel1.text = "Fetching More Jobs"
+//        strLabel1.textColor = UIColor.whiteColor()
+//        messageFrame1 = UIView(frame: CGRect(x: scrollView.contentSize.width , y: scrollView.contentSize.height  , width: 180, height: 50))
+//        messageFrame1.layer.cornerRadius = 15
+//        messageFrame1.backgroundColor = UIColor(white: 0, alpha: 0.5)
+//        
+//        activityIndicator1 = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+//        activityIndicator1.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+//        activityIndicator1.startAnimating()
+//        messageFrame.addSubview(activityIndicator1)
+//        
+//        messageFrame.addSubview(strLabel1)
+//        view.addSubview(messageFrame1)
 //    }
+    
+    func Request_modified(){
+        let count = calCount()
+        let offset = count
+        print(count)
+        let api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "10" + "&offset=" + "\(offset)"
+        let url:NSURL = NSURL(string: api)!
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        request.addValue(Token!, forHTTPHeaderField: "apiToken")
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) {
+            data, response,  error in
+            
+            //When there is no internet
+            if error != nil {
+                print(error?.code)
+                if error?.code == -1009{
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    self.messageFrame.hidden = true
+                    self.view.userInteractionEnabled = true
+                    self.flag = false
+                    dispatch_async(dispatch_get_main_queue(), {
+                        let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        }
+                    )
+                }
+                return
+            }
+            // Convert server json response to NSDictionary
+            do {
+                self.convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary
+                
+                self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
+                print("Data fetched from api")
+                
+                
+                self.save_modified(self.items)
+                
+                //hide activity indicator
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
+                self.flag = false
+                self.messageFrame1.hidden = true
+                self.view.userInteractionEnabled = true
+                
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+        
+        
+        
+    }
+    func save_modified(items: [AnyObject]) {
+        let moc = DataController.sharedInstance.managedObjectContext
+        moc.performBlock { () -> Void in
+            var iter: AnyObject?
+            for index in 0...9 {
+                iter = items[index]
+                if iter != nil {
+                    let temp = iter!["id"]
+                    let Fetch = NSFetchRequest(entityName: "Jobs")
+                    Fetch.predicate = NSPredicate(format: "id = %@", temp!!.description)
+                    do {
+                        if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
+                            let managedObject = fetchedJobs[0]
+                            managedObject.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                            managedObject.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                            managedObject.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
+                            managedObject.setValue("\(iter!["duration"]!!)" ?? "", forKey: "time_taken")
+                            managedObject.setValue("\(iter!["uuid"]!!)" ?? "", forKey: "uuid")
+                            
+                        }
+                        else {
+                            if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
+                                entity.setValue("\(iter!["projectName"]!!)" ?? "", forKey: "project_name")
+                                entity.setValue("\(iter!["id"]!!)" ?? "", forKey: "id")
+                                entity.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                                entity.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                                entity.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
+                                entity.setValue("\(iter!["email"]!!)" ?? "", forKey: "email")
+                                entity.setValue("\(iter!["picture"]!!)" ?? "", forKey: "picture")
+                                entity.created_at = "\(iter!["created_at"]!!)" ?? ""
+                                entity.time_taken = "\(iter!["duration"]!!)" ?? ""
+                                entity.test_label = "\(iter!["label"]!!)" ?? ""
+                                entity.test_suite = "\(iter!["testsuitName"]!!)" ?? ""
+                                entity.uuid = "\(iter!["uuid"]!!)" ?? ""
+                            }
+                        }
+                        
+                    }
+                    catch {
+                        fatalError("Failure to save context: \(error)")
+                    }
+                }
+                do {
+                    try moc.save()
+                }
+                catch {
+                    fatalError("Failure to save context: \(error)")
+                }
+            }
+            
+        }
+        
+        print("Data saved")
+    }
     
     
     // MARK: Move to Detail Page
@@ -277,30 +441,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     }
     
     
-    // MARK: ViewLoad
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configureSearchController()
-        
-        defaults.setBool(true, forKey: "Signed")
-        Token = defaults.stringForKey("TokenKey")
-        
-        //fetch()
-        self.fetch_new()
-        
-        self.messageFrame.hidden = false
-        progressBarDisplayer("Fetching Jobs", true)
-        self.view.userInteractionEnabled = false
-        
-        //Pull to refresh
-        self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
-        
-        //Auto Refresh
-        _ = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
-        
-        Request(0)
-    }
+
     
     func Request(poll: Int) {
         let api: String
@@ -318,17 +459,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             //fetch given number of Jobs
             limit = poll
         }
-        print(limit)
-        print(count)
-        if poll == 20{
-            //when reach at end set offset
-            let offset = count
-            api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)" + "&offset=" + "\(offset)"
-        }
-        else{
-            //no offset required
-            api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)"
-        }
+       
+        api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)"
         let url:NSURL = NSURL(string: api)!
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
@@ -343,6 +475,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 if error?.code == -1009{
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.messageFrame.hidden = true
+                    self.view.userInteractionEnabled = true
                     dispatch_async(dispatch_get_main_queue(), {
                         let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
@@ -428,36 +561,37 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         let moc = DataController.sharedInstance.managedObjectContext
         moc.performBlock { () -> Void in
             
+            var iter: AnyObject?
             for index in 0..<self.limit {
-                self.iter = items[index]
-                if self.iter != nil {
-                    let temp = self.iter!["id"]
+                iter = items[index]
+                if iter != nil {
+                    let temp = iter!["id"]
                     let Fetch = NSFetchRequest(entityName: "Jobs")
                     Fetch.predicate = NSPredicate(format: "id = %@", temp!!.description)
                     do {
                         if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
                             let managedObject = fetchedJobs[0]
-                            managedObject.setValue("\(self.iter!["status"]!!)" ?? "", forKey: "run_failed")
-                            managedObject.setValue("\(self.iter!["passed"]!!)" ?? "", forKey: "passed")
-                            managedObject.setValue("\(self.iter!["failed"]!!)" ?? "", forKey: "failed")
-                            managedObject.setValue("\(self.iter!["duration"]!!)" ?? "", forKey: "time_taken")
-                            managedObject.setValue("\(self.iter!["uuid"]!!)" ?? "", forKey: "uuid")
+                            managedObject.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                            managedObject.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                            managedObject.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
+                            managedObject.setValue("\(iter!["duration"]!!)" ?? "", forKey: "time_taken")
+                            managedObject.setValue("\(iter!["uuid"]!!)" ?? "", forKey: "uuid")
                             
                         }
                         else {
                             if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
-                                entity.setValue("\(self.iter!["projectName"]!!)" ?? "", forKey: "project_name")
-                                entity.setValue("\(self.iter!["id"]!!)" ?? "", forKey: "id")
-                                entity.setValue("\(self.iter!["status"]!!)" ?? "", forKey: "run_failed")
-                                entity.setValue("\(self.iter!["passed"]!!)" ?? "", forKey: "passed")
-                                entity.setValue("\(self.iter!["failed"]!!)" ?? "", forKey: "failed")
-                                entity.setValue("\(self.iter!["email"]!!)" ?? "", forKey: "email")
-                                entity.setValue("\(self.iter!["picture"]!!)" ?? "", forKey: "picture")
-                                entity.created_at = "\(self.iter!["created_at"]!!)" ?? ""
-                                entity.time_taken = "\(self.iter!["duration"]!!)" ?? ""
-                                entity.test_label = "\(self.iter!["label"]!!)" ?? ""
-                                entity.test_suite = "\(self.iter!["testsuitName"]!!)" ?? ""
-                                entity.uuid = "\(self.iter!["uuid"]!!)" ?? ""
+                                entity.setValue("\(iter!["projectName"]!!)" ?? "", forKey: "project_name")
+                                entity.setValue("\(iter!["id"]!!)" ?? "", forKey: "id")
+                                entity.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
+                                entity.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
+                                entity.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
+                                entity.setValue("\(iter!["email"]!!)" ?? "", forKey: "email")
+                                entity.setValue("\(iter!["picture"]!!)" ?? "", forKey: "picture")
+                                entity.created_at = "\(iter!["created_at"]!!)" ?? ""
+                                entity.time_taken = "\(iter!["duration"]!!)" ?? ""
+                                entity.test_label = "\(iter!["label"]!!)" ?? ""
+                                entity.test_suite = "\(iter!["testsuitName"]!!)" ?? ""
+                                entity.uuid = "\(iter!["uuid"]!!)" ?? ""
                             }
                         }
                         
