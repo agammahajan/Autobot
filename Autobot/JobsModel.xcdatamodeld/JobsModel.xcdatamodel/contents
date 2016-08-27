@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
     <entity name="Jobs" representedClassName=".Jobs" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="failed" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,8 +9,11 @@
         <attribute name="picture" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="project_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="run_failed" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="test_label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="test_suite" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time_taken" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Jobs" positionX="-54" positionY="-9" width="128" height="150"/>
+        <element name="Jobs" positionX="-54" positionY="-9" width="128" height="210"/>
     </elements>
 </model>

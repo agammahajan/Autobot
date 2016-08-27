@@ -170,6 +170,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("LabelCell", forIndexPath: indexPath) as! JobTableViewCell
+        
+        
 
         iterator = (showSearchResuts ? filteredJobs[indexPath.row] : fetchedResultsController!.objectAtIndexPath(indexPath) )as? Jobs
         if iterator != nil {
@@ -223,18 +225,56 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         }
       
         messageFrame.hidden = true
+        self.view.userInteractionEnabled = true
         return cell
     }
     
+//    override func scrollViewDidScroll(scrollView: UIScrollView) {
+//        let currentOffset = scrollView.contentOffset.y
+//        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+//        if ((currentOffset > 0) && (maximumOffset - currentOffset) <= 10) {
+//            print("end")
+//          
+//            if Reachability.isConnectedToNetwork() == true {
+//                print("Internet connection OK")
+//                self.view.userInteractionEnabled = false
+//                //messageFrame.hidden = false
+//                Request(20)
+//                self.view.userInteractionEnabled = true
+//                //messageFrame.hidden = true
+//                }
+//            else {
+//                print("Internet connection FAILED")
+//                dispatch_async(dispatch_get_main_queue(), {
+//                let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Old Jobs", preferredStyle: UIAlertControllerStyle.Alert)
+//                alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
+//                self.presentViewController(alert, animated: true, completion: nil)
+//                        }
+//                    )
+//                }
+//        }
+//    }
     
-   // MARK: View disappears
-    override func viewWillDisappear(animated: Bool) {
-//        //changing Defaults to stop auto refresh
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        defaults.setBool(false, forKey: "Signed")
-        
+    
+    // MARK: Move to Detail Page
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //let item = fetchedResultsController!.objectAtIndexPath(indexPath) as? Jobs
+        let item = (showSearchResuts ? filteredJobs[indexPath.row] : fetchedResultsController!.objectAtIndexPath(indexPath) )as? Jobs
+        if item != nil {
+            idDetail = item?.id
+            projectDetail = item?.project_name
+            statusDetail = item?.run_failed
+            createdbyDetail = item?.email
+            createdatDetail = item?.created_at
+            picDetail = item?.picture
+            timetakenDetail = item?.time_taken
+            passedDetail = item?.passed
+            failedDetail = item?.failed
+            testDetail = item?.test_label
+            testsuiteDetail = item?.test_suite
+        }
     }
-   
+    
     
     // MARK: ViewLoad
     override func viewDidLoad() {
@@ -250,6 +290,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         
         self.messageFrame.hidden = false
         progressBarDisplayer("Fetching Jobs", true)
+        self.view.userInteractionEnabled = false
         
         //Pull to refresh
         self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
@@ -257,24 +298,36 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         //Auto Refresh
         _ = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         
-        
-    
-        
-        
-        Request()
+        Request(0)
     }
     
-    func Request() {
-        
+    func Request(poll: Int) {
+        let api: String
         let count = calCount()
+
         if count == 0 {
+            // DB Initialy empty ....first time sign in
             limit = 100
         }
         else{
+            //fetch as many as in DB
             limit = count
         }
+        if poll != 0 {
+            //fetch given number of Jobs
+            limit = poll
+        }
         print(limit)
-        let api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)"
+        print(count)
+        if poll == 20{
+            //when reach at end set offset
+            let offset = count
+            api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)" + "&offset=" + "\(offset)"
+        }
+        else{
+            //no offset required
+            api = "https://autobot.practodev.com/api/v1/jobs?limit=" + "\(limit)"
+        }
         let url:NSURL = NSURL(string: api)!
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
@@ -322,7 +375,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     func refresh(sender:AnyObject){
         //pull to Refresh
         if showSearchResuts == false {
-            Request()
+            Request(50)
             print("Refresh")
         }
         self.refreshControl?.endRefreshing()
@@ -339,7 +392,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                     print("Internet connection OK")
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
                     print("AutoRefresh!")
-                    Request()
+                    Request(0)
                 } else {
                     print("Internet connection FAILED")
                 }
@@ -369,45 +422,56 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     
     // MARK: Saving Data
     func save_data_new(items: [AnyObject]){
-        let moc = DataController.sharedInstance.managedObjectContext
         
-        for index in 0..<limit {
-            iter = items[index]
-            if iter != nil {
-                let temp = iter!["id"]
-                let Fetch = NSFetchRequest(entityName: "Jobs")
-                Fetch.predicate = NSPredicate(format: "id = %@", temp!!.description)
-                do {
-                    if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
-                    let managedObject = fetchedJobs[0]
-                    managedObject.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
-                    managedObject.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
-                    managedObject.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
-                    }
-                    else {
-                        if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
-                            entity.setValue("\(iter!["projectName"]!!)" ?? "", forKey: "project_name")
-                            entity.setValue("\(iter!["id"]!!)" ?? "", forKey: "id")
-                            entity.setValue("\(iter!["status"]!!)" ?? "", forKey: "run_failed")
-                            entity.setValue("\(iter!["passed"]!!)" ?? "", forKey: "passed")
-                            entity.setValue("\(iter!["failed"]!!)" ?? "", forKey: "failed")
-                            entity.setValue("\(iter!["email"]!!)" ?? "", forKey: "email")
-                            entity.setValue("\(iter!["picture"]!!)" ?? "", forKey: "picture")
+        
+        let moc = DataController.sharedInstance.managedObjectContext
+        moc.performBlock { () -> Void in
+            
+            for index in 0..<self.limit {
+                self.iter = items[index]
+                if self.iter != nil {
+                    let temp = self.iter!["id"]
+                    let Fetch = NSFetchRequest(entityName: "Jobs")
+                    Fetch.predicate = NSPredicate(format: "id = %@", temp!!.description)
+                    do {
+                        if let fetchedJobs = try moc.executeFetchRequest(Fetch) as? [Jobs] where fetchedJobs.count > 0{
+                            let managedObject = fetchedJobs[0]
+                            managedObject.setValue("\(self.iter!["status"]!!)" ?? "", forKey: "run_failed")
+                            managedObject.setValue("\(self.iter!["passed"]!!)" ?? "", forKey: "passed")
+                            managedObject.setValue("\(self.iter!["failed"]!!)" ?? "", forKey: "failed")
+                            managedObject.setValue("\(self.iter!["duration"]!!)" ?? "", forKey: "time_taken")
                         }
+                        else {
+                            if let entity = NSEntityDescription.insertNewObjectForEntityForName("Jobs", inManagedObjectContext: moc) as? Jobs{
+                                entity.setValue("\(self.iter!["projectName"]!!)" ?? "", forKey: "project_name")
+                                entity.setValue("\(self.iter!["id"]!!)" ?? "", forKey: "id")
+                                entity.setValue("\(self.iter!["status"]!!)" ?? "", forKey: "run_failed")
+                                entity.setValue("\(self.iter!["passed"]!!)" ?? "", forKey: "passed")
+                                entity.setValue("\(self.iter!["failed"]!!)" ?? "", forKey: "failed")
+                                entity.setValue("\(self.iter!["email"]!!)" ?? "", forKey: "email")
+                                entity.setValue("\(self.iter!["picture"]!!)" ?? "", forKey: "picture")
+                                entity.created_at = "\(self.iter!["created_at"]!!)" ?? ""
+                                entity.time_taken = "\(self.iter!["duration"]!!)" ?? ""
+                                entity.test_label = "\(self.iter!["label"]!!)" ?? ""
+                                entity.test_suite = "\(self.iter!["testsuitName"]!!)" ?? ""
+                            }
+                        }
+                        
                     }
-                    
+                    catch {
+                        fatalError("Failure to save context: \(error)")
+                    }
+                }
+                do {
+                    try moc.save()
                 }
                 catch {
                     fatalError("Failure to save context: \(error)")
                 }
             }
-            do {
-                try moc.save()
-            }
-            catch {
-                fatalError("Failure to save context: \(error)")
-            }
+            
         }
+        
         print("Data saved")
     }
     
@@ -429,6 +493,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             print("Unable to perform fetch: \(error.localizedDescription)")
         }
     }
+    
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         tableView.beginUpdates()
@@ -471,10 +536,14 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     // MARK: Delete DB
         static func deleteDB() {
         let moc = DataController.sharedInstance.managedObjectContext
-        let Fetch = NSFetchRequest(entityName: "Jobs")
-        let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: Fetch)
-        do {
-            try moc.executeRequest(DelAllReqVar) }
-        catch { print(error) }
-    }
+            moc.performBlock { () -> Void in
+                let Fetch = NSFetchRequest(entityName: "Jobs")
+                let DelAllReqVar = NSBatchDeleteRequest(fetchRequest: Fetch)
+                do {
+                    try moc.executeRequest(DelAllReqVar) }
+                catch { print(error) }
+            }
+             print("DB deleted")
+        }
+       
 }
