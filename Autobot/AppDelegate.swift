@@ -8,6 +8,10 @@
 
 import UIKit
 import Foundation
+import Fabric
+import Crashlytics
+
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
@@ -21,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var loginViewController: ViewController!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
+        Fabric.with([Crashlytics.self])
+
         // Override point for customization after application launch.
         // Initialize sign-in
         var configureError: NSError?

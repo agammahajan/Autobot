@@ -19,6 +19,8 @@
 		FA8926211D6F31D300BFBB6E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8926201D6F31D300BFBB6E /* Reachability.swift */; };
 		FA8EA7271D659185009AEF0E /* JobTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */; };
 		FAB4B3411D6B0B96001E7A67 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */; };
+		FAC5C24A1D734B7600535A54 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC5C2481D734B7600535A54 /* Fabric.framework */; };
+		FAC5C24B1D734B7600535A54 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC5C2491D734B7600535A54 /* Crashlytics.framework */; };
 		FAF6E3681D646C6B00D6C249 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6E3671D646C6B00D6C249 /* MainView.swift */; };
 		FAF8D71A1D62D1B700C70D90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */; };
 		FAF8D71C1D62D1B700C70D90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF8D71B1D62D1B700C70D90 /* ViewController.swift */; };
@@ -68,6 +70,8 @@
 		FA8926201D6F31D300BFBB6E /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		FA8EA7261D659185009AEF0E /* JobTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTableViewCell.swift; sourceTree = "<group>"; };
 		FAB4B3401D6B0B96001E7A67 /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		FAC5C2481D734B7600535A54 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		FAC5C2491D734B7600535A54 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		FAF6E3671D646C6B00D6C249 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		FAF8D7161D62D1B700C70D90 /* Autobot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autobot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAF8D7191D62D1B700C70D90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7F772757A1FE2359807E92C /* Pods_Autobot.framework in Frameworks */,
+				FAC5C24B1D734B7600535A54 /* Crashlytics.framework in Frameworks */,
+				FAC5C24A1D734B7600535A54 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +181,8 @@
 		FAF8D70D1D62D1B700C70D90 = {
 			isa = PBXGroup;
 			children = (
+				FAC5C2481D734B7600535A54 /* Fabric.framework */,
+				FAC5C2491D734B7600535A54 /* Crashlytics.framework */,
 				FAF8D7471D62D41000C70D90 /* GoogleService-Info.plist */,
 				FAF8D7181D62D1B700C70D90 /* Autobot */,
 				FAF8D72D1D62D1B700C70D90 /* AutobotTests */,
@@ -243,6 +251,7 @@
 				FAF8D7141D62D1B700C70D90 /* Resources */,
 				356545540C361E42D2989127 /* [CP] Embed Pods Frameworks */,
 				288DF8B46B067CF8E2537B24 /* [CP] Copy Pods Resources */,
+				FAC5C2471D734B0C00535A54 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -306,7 +315,7 @@
 				TargetAttributes = {
 					FAF8D7151D62D1B700C70D90 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = GKYA76TPP5;
+						DevelopmentTeam = EQE3C268Q6;
 					};
 					FAF8D7291D62D1B700C70D90 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -489,6 +498,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		FAC5C2471D734B0C00535A54 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 2da9ddc3d54a92453ff122789ac5f61b2b9de48c 7bbea5c7dee1047482f3bf7a18591e78f911b8323d405e2d13bf99cd3e02ed16";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -653,12 +675,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PRACTO TECHNOLOGIES PRIVATE LIMITED (EQE3C268Q6)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Autobot/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.practo.autobot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "550ee9bd-70bc-4bcb-9641-3c81bc9927af";
 				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/Autobot-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -670,12 +697,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PRACTO TECHNOLOGIES PRIVATE LIMITED (EQE3C268Q6)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Autobot/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.practo.autobot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "550ee9bd-70bc-4bcb-9641-3c81bc9927af";
 				SWIFT_OBJC_BRIDGING_HEADER = "Autobot/Autobot-Bridging-Header.h";
 			};
 			name = Release;

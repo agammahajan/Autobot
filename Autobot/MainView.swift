@@ -248,7 +248,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         }
       
         messageFrame.hidden = true
-        self.view.userInteractionEnabled = true
+        //self.view.userInteractionEnabled = true
         return cell
     }
     
@@ -269,7 +269,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                     // then we are at the end
                     pagingSpinner.hidden = false
                     flag = true     // no more ends are called
-                    self.view.userInteractionEnabled = false
+                    //self.view.userInteractionEnabled = false
                     show_indicator()
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
                     Request_modified()
@@ -462,8 +462,6 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 
                 self.items = self.convertedJsonIntoDict!["jobs"] as! [AnyObject]
                 print("Data fetched from api")
-                
-                
                 self.save_data_new(self.items)
 
                 //hide activity indicator
@@ -495,9 +493,12 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             if showSearchResuts == false {
                 if Reachability.isConnectedToNetwork() == true {
                     print("Internet connection OK")
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                    print("AutoRefresh!")
-                    Request(0)
+                    if flag == true {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                        print("AutoRefresh!")
+                        Request(0)
+                    }
+                    
                 } else {
                     print("Internet connection FAILED")
                 }
