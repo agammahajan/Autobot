@@ -17,7 +17,6 @@ class SplashViewController : UIViewController {
         
     }
     
-    
     func check(){
         if GIDSignIn.sharedInstance().hasAuthInKeychain(){
             //already Signed

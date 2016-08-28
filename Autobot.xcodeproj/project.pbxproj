@@ -142,6 +142,7 @@
 		FA8926221D70A28200BFBB6E /* Helper  */ = {
 			isa = PBXGroup;
 			children = (
+				FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */,
 				FA8926201D6F31D300BFBB6E /* Reachability.swift */,
 			);
 			name = "Helper ";
@@ -202,7 +203,6 @@
 				FAF8D71D1D62D1B700C70D90 /* Main.storyboard */,
 				FA8926231D70A2A700BFBB6E /* Core Data */,
 				FA8926221D70A28200BFBB6E /* Helper  */,
-				FAF8D74B1D62D7BE00C70D90 /* Autobot-Bridging-Header.h */,
 				FAF8D7251D62D1B700C70D90 /* Info.plist */,
 				FAF8D7221D62D1B700C70D90 /* LaunchScreen.storyboard */,
 				FAF8D7201D62D1B700C70D90 /* Assets.xcassets */,

@@ -47,8 +47,6 @@ class ViewController: UIViewController, GIDSignInUIDelegate {
         labelView.backgroundColor = UIColor(white: 1, alpha: 0.2)
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.loginViewController = self
-        
-        
         GIDSignIn.sharedInstance().uiDelegate = self
         
     }

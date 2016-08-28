@@ -27,19 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
         assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        
         GIDSignIn.sharedInstance().delegate = self
-        
-//        if GIDSignIn.sharedInstance().hasAuthInKeychain(){
-//            //silent sign in
-//            //            GIDSignIn.sharedInstance().signInSilently()
-//            //Go to next view
-//            self.MoveToNextView()
-//        }
-//        else{
-//            print("New User")
-//        }
-        
         return true
     }
     
@@ -57,9 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func application(application: UIApplication,
                      openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-        
 //    For your app to run on iOS 8 and older, also implement the deprecated
-        
         var options: [String: AnyObject] = [UIApplicationOpenURLOptionsSourceApplicationKey: sourceApplication!,
                                             UIApplicationOpenURLOptionsAnnotationKey: annotation!]
         return GIDSignIn.sharedInstance().handleURL(url,
@@ -89,7 +75,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
+
+    // MARK: After SignIn
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!,
                 withError error: NSError!) {
         loginViewController.messageFrame.hidden = true
@@ -98,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         if (error == nil) {
             // Perform any operations on signed in user here.
-        
+            
             GetToken(user)
            
         } else {
@@ -114,22 +101,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 //          givenName = user.profile.givenName
 //        let familyName = user.profile.familyName
         
-          email = user.profile.email
+        email = user.profile.email
         givenName = user.profile.name
         if user.profile.hasImage {
             pic = user.profile.imageURLWithDimension(160).absoluteString
-            print(pic!)
         }
         else{
             pic = ""
         }
         let idToken = user.authentication.idToken // Safe to send to the server
-        
-        //print(idToken)
-        print(email)
         let url:NSURL = NSURL(string: "https://autobot.practodev.com/api/v1/getSessionToken")!
-        
-        
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         
@@ -139,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         Request(request)
     }
     
+    // MARK: HTTP Request
     func Request(request: NSMutableURLRequest) {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) {
@@ -154,34 +136,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 
                 return
             }
-            //print(response)
             let httpResponse = response as? NSHTTPURLResponse
             let StatusCode = httpResponse?.statusCode
-            //print(StatusCode)
             if (StatusCode)! == 200 {
-                //let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                //print(dataString!)
-                
                 do {
                     let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     
                     self.token = json["api_token"] as? String
-                    print(self.token!)
-                    
                     //Setting Defaults
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.setObject(self.token, forKey: "TokenKey")
                     defaults.setObject(self.givenName, forKey: "NameKey")
                     defaults.setObject(self.email, forKey: "EmailKey")
                     defaults.setObject(self.pic, forKey: "PicKey")
-                    
                     //for stopping auto refresh
                     defaults.setBool(true, forKey: "Signed")
                     
-                    
                     //Go to next view
                    self.MoveToNextView("TabView")
-                    
                     
                 } catch let error as NSError {
                     print("json error: \(error.localizedDescription)")
@@ -193,7 +165,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 GIDSignIn.sharedInstance().signOut()
             }
             else {
-                print("Dont know")
                 self.loginViewController.messageFrame.hidden = true
                 self.loginViewController.signInButton.enabled = true
                 GIDSignIn.sharedInstance().signOut()
@@ -202,6 +173,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         task.resume()
     }
     
+    
+    // MARK : Go to next view
     func MoveToNextView(view: String){
         //Go to next view
         dispatch_async(dispatch_get_main_queue(),{

@@ -42,8 +42,11 @@ class DetailViewController : UIViewController {
     @IBOutlet weak var reports: UIButton!
     
     @IBAction func clickReports(sender: AnyObject) {
-        let url = "https://dev-tab-steller.s3-ap-southeast-1.amazonaws.com/" + uuidDetail! + "/report.html"
-        UIApplication.sharedApplication().openURL(NSURL(string: url)!)
+        dispatch_async(dispatch_get_main_queue()) {
+            let url = "https://dev-tab-steller.s3-ap-southeast-1.amazonaws.com/" + uuidDetail! + "/report.html"
+            UIApplication.sharedApplication().openURL(NSURL(string: url)!)
+        }
+        
     }
     
     
