@@ -68,6 +68,8 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     //for stopping many end calls
     var flag: Bool = true
     
+    //for stopping auto refresh
+    var refreshFlag: Bool = true
     
     
     // MARK: ViewLoad
@@ -97,7 +99,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 self.refreshControl?.addTarget(self, action: #selector(MainView.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         //Auto Refresh
-                _ = NSTimer.scheduledTimerWithTimeInterval(60, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
+                _ = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MainView.update), userInfo: nil, repeats: true)
         Request(0)
     }
     
@@ -107,6 +109,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     // MARK: SearchBAR
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         pagingSpinner.hidden = true
+        NoNetLabel.hidden = true
         showSearchResuts = true
         self.fetchedResultsController?.delegate = nil
         tableView.reloadData()
@@ -117,9 +120,11 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         tableView.reloadData()
         self.fetchedResultsController?.delegate = self
         pagingSpinner.hidden = true
+        
     }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         pagingSpinner.hidden = true
+        NoNetLabel.hidden = true
         if !showSearchResuts {
             showSearchResuts = true
             tableView.reloadData()
@@ -269,9 +274,10 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                     // then we are at the end
                     pagingSpinner.hidden = false
                     flag = true     // no more ends are called
-                    self.view.userInteractionEnabled = false
+                    refreshFlag = false
+//                    self.view.userInteractionEnabled = false
                     show_indicator()
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
                     Request_modified()
                 }
             }
@@ -308,10 +314,11 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
             //When there is no internet
             if error != nil {
                 if error?.code == -1009{
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.messageFrame.hidden = true
                     self.view.userInteractionEnabled = true
                     self.flag = false
+                    self.refreshFlag = true
                     self.pagingSpinner.hidden = true
                 }
                 return
@@ -324,10 +331,11 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 print("Data fetched from api")
                 self.save_modified(self.items)
                 //hide activity indicator
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 self.flag = false
                 self.pagingSpinner.hidden = true
                 self.view.userInteractionEnabled = true
+                self.refreshFlag = true
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
@@ -447,6 +455,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     self.messageFrame.hidden = true
                     self.view.userInteractionEnabled = true
+                    self.refreshFlag = true
                     dispatch_async(dispatch_get_main_queue(), {
                         let alert = UIAlertController(title: "No Internet Connection Found", message: "Connect to Internet to get Latest Jobs", preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: nil))
@@ -465,7 +474,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
                 
                 
                 self.save_data_new(self.items)
-
+                self.refreshFlag = true
                 //hide activity indicator
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                
@@ -480,6 +489,7 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
     func refresh(sender:AnyObject){
         //pull to Refresh
         if showSearchResuts == false {
+            refreshFlag = false
             Request(50)
             print("Refresh")
         }
@@ -491,18 +501,24 @@ class MainView : UITableViewController , NSFetchedResultsControllerDelegate , UI
         //show activity indicator and auto refresh
         let defaults = NSUserDefaults.standardUserDefaults()
         let temp = defaults.boolForKey("Signed")
-        if temp == true {
-            if showSearchResuts == false {
-                if Reachability.isConnectedToNetwork() == true {
-                    print("Internet connection OK")
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                    print("AutoRefresh!")
-                    Request(0)
-                } else {
-                    print("Internet connection FAILED")
-                }
-            }
-            
+//        if temp == true {
+//            if showSearchResuts == false {
+//                if Reachability.isConnectedToNetwork() == true {
+//                    print("Internet connection OK")
+//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//                    print("AutoRefresh!")
+//                    Request(0)
+//                } else {
+//                    print("Internet connection FAILED")
+//                }
+//            }
+//            
+//        }
+        if temp == true && showSearchResuts == false && Reachability.isConnectedToNetwork() == true && refreshFlag == true {
+            print("Internet connection OK")
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            print("AutoRefresh!")
+            Request(0)
         }
         
     }
