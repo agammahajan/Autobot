@@ -1,0 +1,6 @@
+framework module Pods_AutobotUITests {
+  umbrella header "Pods-AutobotUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
